@@ -1,5 +1,5 @@
 const Analytics = () => {
-    return <div>main page</div>;
+    return <div>аналитика</div>;
 };
 
 export default Analytics;
