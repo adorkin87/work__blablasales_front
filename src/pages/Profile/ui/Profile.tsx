@@ -1,6 +1,8 @@
-import cls from './Analytics.module.scss';
+import cls from './Profile.module.scss';
+
 import LeftPanel from '../../../widgets/LeftPanel';
-const Analytics = () => {
+
+const Profile = () => {
     return (
         <div className={cls.main}>
             <LeftPanel />
@@ -8,4 +10,4 @@ const Analytics = () => {
     );
 };
 
-export default Analytics;
+export default Profile;

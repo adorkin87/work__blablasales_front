@@ -7,6 +7,7 @@ import Login from '../../../../pages/Login';
 import Conversation from '../../../../pages/Conversation';
 import Scripts from '../../../../pages/Scripts';
 import Analytics from '../../../../pages/Analytics';
+import Profile from '../../../../pages/Profile';
 import NotFound from '../../../../pages/NotFound';
 
 //components
@@ -38,8 +39,13 @@ const AppRouter = () => {
                     <Suspense fallback={<p>Loading...</p>}>
                         <Routes>
                             <Route path={'/'} element={<Conversation />} />
+                            <Route path={'/conversation/:upload'} element={<Conversation />} />
+                            <Route path={'/conversation/:slug'} element={<Conversation />} />
                             <Route path={'/scripts'} element={<Scripts />} />
+                            <Route path={'/scripts/add'} element={<Scripts />} />
+                            <Route path={'/scripts/:slug'} element={<Scripts />} />
                             <Route path={'/analytics'} element={<Analytics />} />
+                            <Route path={'/profile'} element={<Profile />} />
                             <Route path={'/*'} element={<NotFound />} />
                         </Routes>
                     </Suspense>

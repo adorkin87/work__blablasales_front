@@ -1,32 +1,67 @@
-import { Link } from 'react-router-dom';
-import { observer } from 'mobx-react-lite';
-import cls from './TopPanel.module.scss';
+import { Link as ReactLink, useLocation } from 'react-router-dom';
 
-//stores
-// import viewer from '../../../entities/viewer';
+import { Stack, Link, Typography } from '@mui/joy';
 
 const TopPanel = () => {
+    const location = useLocation();
+
+    const currentSection =
+        location.pathname === '/' ? '/' : location.pathname.substring(1, location.pathname.length).split('/')[0];
+
     return (
-        <div className={cls.topMenu}>
-            <div className={cls.left}>
-                <Link className={cls.logo} to={'/'}>
-                    <div>
-                        <img src={'/images/logo.png'} alt={'logo'} />
-                        <p>BlaBlaSALES</p>
-                    </div>
+        <Stack height={80} p={2} justifyContent={'space-between'} alignItems={'center'} bgcolor={'#0a2640'}>
+            <Stack gap={8} alignItems={'center'}>
+                <Link component={ReactLink} to={'/'} underline={'none'} sx={{ color: '#fff' }}>
+                    <Stack alignItems={'center'} gap={1}>
+                        <img src={'/images/logo.png'} alt={'logo'} height={40} />
+                        <Typography fontSize={40}>BlaBlaSALES</Typography>
+                    </Stack>
                 </Link>
-                <div className={cls.mainMenu}>
-                    <Link to={'/'}>Загрузка аудио</Link>
-                    <Link to={'/scripts'}>Редактор скриптов</Link>
-                    <Link to={'/analytics'}>Аналитика</Link>
-                </div>
-            </div>
-            <div className={cls.right}>
+                <Stack alignItems={'center'} gap={4}>
+                    <Link
+                        component={ReactLink}
+                        to={'/'}
+                        underline={currentSection === '/' || currentSection === 'conversation' ? 'always' : 'hover'}
+                        sx={{
+                            color: currentSection === '/' || currentSection === 'conversation' ? '#65e4a3' : 'white',
+                            textDecorationColor: '#65e4a3'
+                        }}>
+                        Загрузка аудио
+                    </Link>
+                    <Link
+                        component={ReactLink}
+                        to={'/scripts'}
+                        underline={currentSection === 'scripts' ? 'always' : 'hover'}
+                        sx={{
+                            color: currentSection === 'scripts' ? '#65e4a3' : 'white',
+                            textDecorationColor: '#65e4a3'
+                        }}>
+                        Редактор скриптов
+                    </Link>
+                    <Link
+                        component={ReactLink}
+                        to={'/analytics'}
+                        underline={currentSection === 'analytics' ? 'always' : 'hover'}
+                        sx={{
+                            color: currentSection === 'analytics' ? '#65e4a3' : 'white',
+                            textDecorationColor: '#65e4a3'
+                        }}>
+                        Аналитика
+                    </Link>
+                </Stack>
+            </Stack>
+            <Stack alignItems={'center'} gap={4}>
                 {/*<p>Баланс {viewer.bill}</p>*/}
-                <Link to={'/'}>Мой профиль</Link>
-            </div>
-        </div>
+                <Link
+                    component={ReactLink}
+                    underline={currentSection === 'profile' ? 'always' : 'hover'}
+                    sx={{ color: currentSection === 'profile' ? '#65e4a3' : 'white', textDecorationColor: '#65e4a3' }}
+                    to={'/profile'}>
+                    Мой профиль
+                </Link>
+            </Stack>
+        </Stack>
     );
 };
 
-export default observer(TopPanel);
+export default TopPanel;
