@@ -1,12 +1,14 @@
-import cls from './Profile.module.scss';
+import { Stack } from '@mui/joy';
 
-import LeftPanel from '../../../widgets/LeftPanel';
+import { LeftPanelProfile } from '../../../widgets/LeftPanel';
+import RightPanel from '../../../shared/ui/RightPanel';
 
 const Profile = () => {
     return (
-        <div className={cls.main}>
-            <LeftPanel />
-        </div>
+        <Stack>
+            <LeftPanelProfile />
+            <RightPanel></RightPanel>
+        </Stack>
     );
 };
 

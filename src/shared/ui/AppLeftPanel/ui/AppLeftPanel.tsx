@@ -1,8 +1,12 @@
-import { useCallback } from 'react';
+import { ReactNode, useCallback } from 'react';
 
 import { Box } from '@mui/joy';
 
-const LeftPanel = ({ children }: any) => {
+interface Props {
+    children: ReactNode;
+}
+
+const AppLeftPanel = ({ children }: Props) => {
     const panelRef = useCallback((node: any) => {
         if (node) {
             node.style.height = node.offsetParent.offsetHeight - node.offsetTop + 'px';
@@ -10,10 +14,10 @@ const LeftPanel = ({ children }: any) => {
     }, []);
 
     return (
-        <Box ref={panelRef} width={275} padding={4} sx={{ bgcolor: '#355d82' }}>
+        <Box ref={panelRef} minWidth={275} maxWidth={275} padding={4} bgcolor={'#355d82'}>
             {children}
         </Box>
     );
 };
 
-export default LeftPanel;
+export default AppLeftPanel;

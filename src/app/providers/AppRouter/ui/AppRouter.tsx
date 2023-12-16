@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite';
 
 //pages
 import Login from '../../../../pages/Login';
-import Conversation from '../../../../pages/Conversation';
-import Scripts from '../../../../pages/Scripts';
+import { ConversationList, ConversationUpload } from '../../../../pages/Conversations';
+import { ScriptList, Script } from '../../../../pages/Scripts';
 import Analytics from '../../../../pages/Analytics';
 import Profile from '../../../../pages/Profile';
 import NotFound from '../../../../pages/NotFound';
@@ -38,12 +38,11 @@ const AppRouter = () => {
                     <TopPanel />
                     <Suspense fallback={<p>Loading...</p>}>
                         <Routes>
-                            <Route path={'/'} element={<Conversation />} />
-                            <Route path={'/conversation/:upload'} element={<Conversation />} />
-                            <Route path={'/conversation/:slug'} element={<Conversation />} />
-                            <Route path={'/scripts'} element={<Scripts />} />
-                            <Route path={'/scripts/add'} element={<Scripts />} />
-                            <Route path={'/scripts/:slug'} element={<Scripts />} />
+                            <Route path={'/'} element={<ConversationList />} />
+                            <Route path={'/conversation/:upload'} element={<ConversationUpload />} />
+                            <Route path={'/scripts'} element={<ScriptList />} />
+                            <Route path={'/scripts/add'} element={<Script />} />
+                            <Route path={'/scripts/:slug'} element={<Script />} />
                             <Route path={'/analytics'} element={<Analytics />} />
                             <Route path={'/profile'} element={<Profile />} />
                             <Route path={'/*'} element={<NotFound />} />

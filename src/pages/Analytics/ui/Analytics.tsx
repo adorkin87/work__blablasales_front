@@ -1,10 +1,12 @@
-import cls from './Analytics.module.scss';
-import LeftPanel from '../../../widgets/LeftPanel';
+import { Stack } from '@mui/joy';
+
+import { LeftPanelAnalytics } from '../../../widgets/LeftPanel';
+
 const Analytics = () => {
     return (
-        <div className={cls.main}>
-            <LeftPanel />
-        </div>
+        <Stack>
+            <LeftPanelAnalytics />
+        </Stack>
     );
 };
 
