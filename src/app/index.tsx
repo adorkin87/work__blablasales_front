@@ -31,6 +31,11 @@ const theme = extendTheme({
                 sx: { outline: 'none' }
             }
         }
+        // JoyTable: {
+        //     defaultProps: {
+        //         sx: { borderRadius: 10 }
+        //     }
+        // }
     }
 });
 

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
@@ -13,10 +13,12 @@ import AppBtnDel from '../../../shared/ui/AppBtnDel';
 import { formatDate } from '../../../shared/lib/formateDate.ts';
 
 // store
-import managerListStore from '../model/store/managerList.store.ts';
+import StoreItemList from '../../../shared/store/baseStoreList.ts';
 
 const ManagerList = observer(() => {
     const navigate = useNavigate();
+
+    const [managerListStore] = useState(() => new StoreItemList('http://10.10.0.106:8001/api/v1/agent'));
 
     useEffect(() => {
         managerListStore.getList();
@@ -28,9 +30,9 @@ const ManagerList = observer(() => {
         <Table stickyHeader borderAxis={'bothBetween'} size={'sm'}>
             <thead>
                 <tr>
-                    <th colSpan={1}>Дата добавления</th>
-                    <th colSpan={1}>ФИО</th>
-                    <th colSpan={1}>Комментарий</th>
+                    <th style={{ backgroundColor: 'transparent' }}>Дата добавления</th>
+                    <th style={{ backgroundColor: 'transparent' }}>ФИО</th>
+                    <th style={{ backgroundColor: 'transparent' }}>Комментарий</th>
                 </tr>
             </thead>
             <tbody>
@@ -39,7 +41,7 @@ const ManagerList = observer(() => {
                         <td>{formatDate(manager[1]['adding_date'])}</td>
                         <td>{manager[1]['agent_name']}</td>
                         <td>
-                            <Stack justifyContent={'space-between'}>
+                            <Stack justifyContent={'space-between'} alignItems={'center'}>
                                 {manager[1]['agent_comment']}
                                 <Box>
                                     <AppBtnEdit onClick={() => navigate('/profile/managers/' + manager[0])} />
