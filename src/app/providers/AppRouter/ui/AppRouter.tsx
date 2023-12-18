@@ -7,31 +7,31 @@ import Login from '../../../../pages/Login';
 import { ConversationList, ConversationUpload } from '../../../../pages/Conversations';
 import { ScriptList, Script } from '../../../../pages/Scripts';
 import Analytics from '../../../../pages/Analytics';
-import { ProfileRequisites, ProfileManagers } from '../../../../pages/Profile';
+import { ProfileRequisites, ProfileManagers, ProfileManager } from '../../../../pages/Profile';
 import NotFound from '../../../../pages/NotFound';
 
 //components
 import TopPanel from '../../../../widgets/TopPanel';
 
 //stores
-import viewer from '../../../../entities/viewer';
+import authStore from '../../../../shared/auth';
 
 const AppRouter = observer(() => {
     const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
-        viewer.auth ? navigate('/') : navigate('/login');
-    }, [viewer.auth]);
+        authStore.auth ? navigate('/') : navigate('/login');
+    }, [authStore.auth]);
 
     useEffect(() => {
-        location.pathname === '/login' && viewer.auth && navigate('/');
+        location.pathname === '/login' && authStore.auth && navigate('/');
     }, [location.pathname]);
 
     // *************************************************************************************************
     // render
 
-    switch (viewer.auth) {
+    switch (authStore.auth) {
         case true:
             return (
                 <>
@@ -46,6 +46,8 @@ const AppRouter = observer(() => {
                             <Route path={'/analytics'} element={<Analytics />} />
                             <Route path={'/profile'} element={<ProfileRequisites />} />
                             <Route path={'/profile/managers'} element={<ProfileManagers />} />
+                            <Route path={'/profile/managers/add'} element={<ProfileManager />} />
+                            <Route path={'/profile/managers/:slug'} element={<ProfileManager />} />
                             <Route path={'/*'} element={<NotFound />} />
                         </Routes>
                     </Suspense>

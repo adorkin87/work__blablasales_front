@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { Stack, Input, Button } from '@mui/joy';
 
 //stores
-import viewer from '../../../entities/viewer';
+import authStore from '../../../shared/auth';
 
 const Login = observer(() => {
     const [valueLogin, setValueLogin] = useState<string>('');
@@ -25,7 +25,7 @@ const Login = observer(() => {
                     type={'password'}
                     placeholder={'Пароль'}
                 />
-                <Button fullWidth onClick={() => viewer.login({ login: valueLogin, password: valuePassword })}>
+                <Button fullWidth onClick={() => authStore.login(valueLogin, valuePassword)}>
                     Войти
                 </Button>
             </Stack>

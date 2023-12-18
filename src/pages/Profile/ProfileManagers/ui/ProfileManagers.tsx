@@ -8,14 +8,11 @@ import { LeftPanelProfile } from '../../../../widgets/LeftPanel';
 import RightPanel from '../../../../shared/ui/RightPanel';
 
 //components
-import ManagerList from '../../../../entities/ManagerList';
+import ManagerList from '../../../../widgets/ManagerList';
+import { BtnAddManager } from '../../../../features/Managers';
 
 const ProfileManagers = () => {
     const navigate = useNavigate();
-
-    const handleBtnAddManager = (): void => {
-        navigate('/profile/managers/add');
-    };
 
     const handleBtnEditManager = (managerID: number): void => {
         navigate('/profile/managers' + managerID);
@@ -26,7 +23,7 @@ const ProfileManagers = () => {
             <LeftPanelProfile />
             <RightPanel>
                 <Box marginBottom={4}>
-                    <Button onClick={handleBtnAddManager}>+ Добавить менеджера</Button>
+                    <BtnAddManager />
                 </Box>
                 <Sheet sx={{ bgcolor: '#fff' }}>
                     <ManagerList />

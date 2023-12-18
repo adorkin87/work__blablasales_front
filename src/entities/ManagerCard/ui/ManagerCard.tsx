@@ -1,5 +1,5 @@
 const ManagerCard = () => {
-    return <div></div>;
+    return <div>test</div>;
 };
 
 export default ManagerCard;

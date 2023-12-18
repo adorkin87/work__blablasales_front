@@ -26,13 +26,7 @@ export async function apiGetItems(url: string, accessToken: string, getParams?: 
     }
 }
 
-interface ApiAddItem {
-    url: string;
-    accessToken: string;
-    itemData: object;
-}
-
-export async function apiAddItem({ url, accessToken, itemData }: ApiAddItem): Promise<object | false> {
+export async function apiAddItem(url: string, accessToken: string, itemData: object): Promise<object | false> {
     try {
         return fetch(url, {
             method: 'POST',
@@ -56,13 +50,7 @@ export async function apiAddItem({ url, accessToken, itemData }: ApiAddItem): Pr
     }
 }
 
-interface ApiUpdItem {
-    url: string;
-    accessToken: string;
-    itemData: object;
-}
-
-export async function apiUpdItem({ url, accessToken, itemData }: ApiUpdItem): Promise<object | false> {
+export async function apiUpdItem(url: string, accessToken: string, itemData: object): Promise<object | false> {
     try {
         return fetch(url, {
             method: 'PATCH',
@@ -86,12 +74,7 @@ export async function apiUpdItem({ url, accessToken, itemData }: ApiUpdItem): Pr
     }
 }
 
-interface ApiDelItem {
-    url: string;
-    accessToken: string;
-}
-
-export async function apiDelItem({ url, accessToken }: ApiDelItem): Promise<object | false> {
+export async function apiDelItem(url: string, accessToken: string): Promise<object | false> {
     try {
         return fetch(url, {
             method: 'DELETE',

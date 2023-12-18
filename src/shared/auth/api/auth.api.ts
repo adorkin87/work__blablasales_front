@@ -1,7 +1,7 @@
-const baseURL: string = import.meta.env.VITE_URL_BASE;
+const endpoint: string = import.meta.env.VITE_ENDPOINT_AUTH;
 
 export async function apiLogin(login: string, password: string): Promise<object | false> {
-    const url = baseURL + import.meta.env.VITE_ENDPOINT_AUTH + '/login';
+    const url = endpoint + '/login';
 
     try {
         return await fetch(url, {
@@ -27,7 +27,7 @@ export async function apiLogin(login: string, password: string): Promise<object 
 }
 
 export async function apiLogout(accessToken: string): Promise<boolean> {
-    const url = baseURL + import.meta.env.VITE_ENDPOINT_AUTH + '/logout';
+    const url = endpoint + '/logout';
 
     try {
         return await fetch(url, {
@@ -52,7 +52,7 @@ export async function apiLogout(accessToken: string): Promise<boolean> {
 }
 
 export async function apiCheckToken(accessToken: string): Promise<object | false> {
-    const url = baseURL + import.meta.env.VITE_ENDPOINT_AUTH + '/check';
+    const url = endpoint + '/check';
 
     try {
         return await fetch(url, {

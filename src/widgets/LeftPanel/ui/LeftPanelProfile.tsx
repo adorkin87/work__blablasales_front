@@ -22,10 +22,10 @@ const LeftPanelProfile = () => {
             <Stack direction={'column'} gap={2}>
                 <Link
                     component={ReactLink}
-                    to={'/profile/'}
-                    underline={currentSection === 'add' ? 'always' : 'hover'}
+                    to={'/profile'}
+                    underline={currentSection === 'profile' ? 'always' : 'hover'}
                     sx={{
-                        color: currentSection === 'add' ? '#65e4a3' : '#fff',
+                        color: currentSection === 'profile' ? '#65e4a3' : '#fff',
                         textDecorationColor: '#65e4a3'
                     }}>
                     Реквизиты
@@ -33,9 +33,9 @@ const LeftPanelProfile = () => {
                 <Link
                     component={ReactLink}
                     to={'/profile/managers'}
-                    underline={currentSection === 'scripts' ? 'always' : 'hover'}
+                    underline={currentSection === 'add' ? 'always' : 'hover'}
                     sx={{
-                        color: currentSection === 'scripts' ? '#65e4a3' : '#fff',
+                        color: currentSection === 'add' ? '#65e4a3' : '#fff',
                         textDecorationColor: '#65e4a3'
                     }}>
                     Менеджеры

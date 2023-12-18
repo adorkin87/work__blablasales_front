@@ -3,7 +3,7 @@ import { Link as ReactLink, useLocation } from 'react-router-dom';
 import { Stack, Link, Typography } from '@mui/joy';
 
 //stores
-import viewer from '../../../entities/viewer';
+import authStore from '../../../shared/auth';
 
 const TopPanel = () => {
     const location = useLocation();
@@ -62,7 +62,7 @@ const TopPanel = () => {
                     to={'/profile'}>
                     Мой профиль
                 </Link>
-                <Link sx={{ color: 'white', textDecorationColor: '#65e4a3' }} onClick={() => viewer.logout()}>
+                <Link sx={{ color: 'white', textDecorationColor: '#65e4a3' }} onClick={() => authStore.logout()}>
                     Выйти
                 </Link>
             </Stack>
