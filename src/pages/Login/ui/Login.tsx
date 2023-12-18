@@ -1,15 +1,36 @@
+import { useState } from 'react';
+import { observer } from 'mobx-react-lite';
+
+//mui
 import { Stack, Input, Button } from '@mui/joy';
 
-const Login = () => {
+//stores
+import viewer from '../../../entities/viewer';
+
+const Login = observer(() => {
+    const [valueLogin, setValueLogin] = useState<string>('');
+    const [valuePassword, setValuePassword] = useState<string>('');
+
     return (
         <Stack height={'100vh'} alignItems={'center'} justifyContent={'center'}>
-            <Stack width={'320px'} spacing={2}>
-                <Input placeholder={'Имя пользователя'} />
-                <Input type={'password'} placeholder={'Пароль'} />
-                <Button fullWidth>Войти</Button>
+            <Stack direction={'column'} width={'320px'} spacing={2}>
+                <Input
+                    value={valueLogin}
+                    onChange={(e) => setValueLogin(e.target.value)}
+                    placeholder={'Имя пользователя'}
+                />
+                <Input
+                    value={valuePassword}
+                    onChange={(e) => setValuePassword(e.target.value)}
+                    type={'password'}
+                    placeholder={'Пароль'}
+                />
+                <Button fullWidth onClick={() => viewer.login({ login: valueLogin, password: valuePassword })}>
+                    Войти
+                </Button>
             </Stack>
         </Stack>
     );
-};
+});
 
 export default Login;

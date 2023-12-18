@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 //mui
-import { Box, Button, IconButton, Link, Select, Sheet, Stack, Table, Tooltip } from '@mui/joy';
+import { Box, Button, IconButton, Typography, Select, Sheet, Stack, Table, Tooltip } from '@mui/joy';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
 //components
@@ -58,30 +58,33 @@ const ConversationUpload = observer(() => {
         <Stack>
             <LeftPanelConversation />
             <RightPanel>
-                <input
-                    id={'fileUpload'}
-                    type={'file'}
-                    multiple
-                    accept={'audio/*'}
-                    style={{ display: 'none' }}
-                    onChange={handleFileEvent}
-                />
-                <Stack justifyContent={'space-between'}>
+                <Stack marginBottom={4} alignItems={'end'} gap={4}>
+                    <input
+                        id={'fileUpload'}
+                        type={'file'}
+                        multiple
+                        accept={'audio/*'}
+                        style={{ display: 'none' }}
+                        onChange={handleFileEvent}
+                    />
                     <label htmlFor={'fileUpload'}>
-                        <Box sx={{ padding: 1, bgcolor: 'blue', color: '#fff', cursor: 'pointer' }}>asdf</Box>
+                        <Box sx={{ padding: 1, bgcolor: 'blue', color: '#fff', cursor: 'pointer' }}>Добавить аудио</Box>
                     </label>
-                    <Stack gap={2}>
-                        <Select placeholder={'менеджер'} />
-                        <Select placeholder={'скрипт'} />
+                    <Stack direction={'column'}>
+                        <Typography>Менеджер</Typography>
+                        <Select size={'sm'} placeholder={'...'} sx={{ width: 200 }} />
+                    </Stack>
+                    <Stack direction={'column'}>
+                        <Typography>Скрипт</Typography>
+                        <Select size={'sm'} placeholder={'...'} sx={{ width: 200 }} />
                     </Stack>
                 </Stack>
                 <Sheet sx={{ overflow: 'auto' }}>
-                    <Table stickyHeader size={'sm'}>
+                    <Table stickyHeader size={'sm'} bgcolor={'#fff'}>
                         <thead>
                             <tr>
                                 <th>Название файла</th>
-                                <th width={'20%'} />
-                                <th width={'10%'} />
+                                <th width={'30%'} />
                             </tr>
                         </thead>
                         <tbody>
@@ -91,13 +94,13 @@ const ConversationUpload = observer(() => {
                                         <Tooltip placement={'top-start'} enterDelay={1000} title={file[1].name}>
                                             <td>{file[1].name}</td>
                                         </Tooltip>
-                                        <td align={'center'}>
-                                            <Button size={'sm'}>Обработать</Button>
-                                        </td>
                                         <td align={'right'}>
-                                            <IconButton size={'sm'} onClick={() => console.log('here')}>
-                                                <DeleteForeverRoundedIcon />
-                                            </IconButton>
+                                            <Stack justifyContent={'end'} alignItems={'center'} gap={2}>
+                                                <Button size={'sm'}>Обработать</Button>
+                                                <IconButton size={'sm'} onClick={() => console.log('here')}>
+                                                    <DeleteForeverRoundedIcon />
+                                                </IconButton>
+                                            </Stack>
                                         </td>
                                     </tr>
                                 ))}

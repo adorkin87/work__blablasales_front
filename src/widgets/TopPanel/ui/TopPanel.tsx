@@ -2,6 +2,9 @@ import { Link as ReactLink, useLocation } from 'react-router-dom';
 
 import { Stack, Link, Typography } from '@mui/joy';
 
+//stores
+import viewer from '../../../entities/viewer';
+
 const TopPanel = () => {
     const location = useLocation();
 
@@ -58,6 +61,9 @@ const TopPanel = () => {
                     sx={{ color: currentSection === 'profile' ? '#65e4a3' : 'white', textDecorationColor: '#65e4a3' }}
                     to={'/profile'}>
                     Мой профиль
+                </Link>
+                <Link sx={{ color: 'white', textDecorationColor: '#65e4a3' }} onClick={() => viewer.logout()}>
+                    Выйти
                 </Link>
             </Stack>
         </Stack>

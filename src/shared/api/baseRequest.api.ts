@@ -1,13 +1,4 @@
-const baseURL = import.meta.env.VITE_URL_BASE;
-
-interface getApi {
-    endpoint: string;
-    accessToken: string;
-    getParams: object;
-}
-
-export async function apiGetItems({ endpoint, accessToken, getParams }: getApi) {
-    let url = baseURL + endpoint;
+export async function apiGetItems(url: string, accessToken: string, getParams?: object): Promise<object | false> {
     if (getParams) {
         url += '?';
         Object.entries(getParams).forEach((param) => (url += `${param[0]}=${param[1]}&`));
@@ -35,15 +26,13 @@ export async function apiGetItems({ endpoint, accessToken, getParams }: getApi) 
     }
 }
 
-interface addApi {
-    endpoint: string;
+interface ApiAddItem {
+    url: string;
     accessToken: string;
     itemData: object;
 }
 
-export async function apiAddItem({ endpoint, accessToken, itemData }: addApi) {
-    const url = baseURL + endpoint;
-
+export async function apiAddItem({ url, accessToken, itemData }: ApiAddItem): Promise<object | false> {
     try {
         return fetch(url, {
             method: 'POST',
@@ -67,9 +56,13 @@ export async function apiAddItem({ endpoint, accessToken, itemData }: addApi) {
     }
 }
 
-export async function apiUpdItem({ endpoint, accessToken, itemID, itemData }: any) {
-    const url = baseURL + endpoint + '/' + itemID;
+interface ApiUpdItem {
+    url: string;
+    accessToken: string;
+    itemData: object;
+}
 
+export async function apiUpdItem({ url, accessToken, itemData }: ApiUpdItem): Promise<object | false> {
     try {
         return fetch(url, {
             method: 'PATCH',
@@ -93,9 +86,12 @@ export async function apiUpdItem({ endpoint, accessToken, itemID, itemData }: an
     }
 }
 
-export async function apiDelItem({ endpoint, accessToken, itemID }: any) {
-    const url = baseURL + endpoint + '/' + itemID;
+interface ApiDelItem {
+    url: string;
+    accessToken: string;
+}
 
+export async function apiDelItem({ url, accessToken }: ApiDelItem): Promise<object | false> {
     try {
         return fetch(url, {
             method: 'DELETE',

@@ -7,7 +7,7 @@ import Login from '../../../../pages/Login';
 import { ConversationList, ConversationUpload } from '../../../../pages/Conversations';
 import { ScriptList, Script } from '../../../../pages/Scripts';
 import Analytics from '../../../../pages/Analytics';
-import Profile from '../../../../pages/Profile';
+import { ProfileRequisites, ProfileManagers } from '../../../../pages/Profile';
 import NotFound from '../../../../pages/NotFound';
 
 //components
@@ -16,12 +16,12 @@ import TopPanel from '../../../../widgets/TopPanel';
 //stores
 import viewer from '../../../../entities/viewer';
 
-const AppRouter = () => {
+const AppRouter = observer(() => {
     const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
-        !viewer.auth && navigate('/login');
+        viewer.auth ? navigate('/') : navigate('/login');
     }, [viewer.auth]);
 
     useEffect(() => {
@@ -44,7 +44,8 @@ const AppRouter = () => {
                             <Route path={'/scripts/add'} element={<Script />} />
                             <Route path={'/scripts/:slug'} element={<Script />} />
                             <Route path={'/analytics'} element={<Analytics />} />
-                            <Route path={'/profile'} element={<Profile />} />
+                            <Route path={'/profile'} element={<ProfileRequisites />} />
+                            <Route path={'/profile/managers'} element={<ProfileManagers />} />
                             <Route path={'/*'} element={<NotFound />} />
                         </Routes>
                     </Suspense>
@@ -60,6 +61,6 @@ const AppRouter = () => {
                 </Suspense>
             );
     }
-};
+});
 
-export default observer(AppRouter);
+export default AppRouter;

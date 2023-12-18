@@ -21,7 +21,7 @@ const Script = () => {
         <Stack>
             <LeftPanelScripts />
             <RightPanel>
-                <Sheet ref={tableRef} sx={{ overflow: 'auto' }}>
+                <Sheet ref={tableRef} sx={{ overflow: 'auto', bgcolor: '#fff' }}>
                     <ScriptCard />
                 </Sheet>
             </RightPanel>
