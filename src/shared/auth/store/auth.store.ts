@@ -1,4 +1,4 @@
-import { makeObservable, observable, flow, autorun } from 'mobx';
+import { makeObservable, observable, flow } from 'mobx';
 
 //api func
 import { apiLogin, apiLogout, apiCheckToken } from '../api/auth.api.ts';

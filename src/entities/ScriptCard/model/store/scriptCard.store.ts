@@ -10,7 +10,13 @@ class ScriptStore {
     // endpoint: string = import.meta.env.VITE_ENDPOINT_SCRIPT;
     state: 'init' | 'pending' | 'done' | 'error' = 'init';
 
-    constructor(script: ScriptCardType = { name: '', comment: '', stages: [] }) {
+    constructor(
+        script: ScriptCardType = {
+            name: '',
+            comment: '',
+            script_text: { kev: { name: 'Ключевой этап воронки (КЭВ)', markers: [] }, stages: [] }
+        }
+    ) {
         makeObservable(this, {
             script: observable,
             state: observable,

@@ -5,24 +5,28 @@ export type Trigger = {
 
 export type Marker = {
     name: string;
-    order: number;
+    order?: number;
     weight?: number;
     triggers: Trigger[];
 };
 
 export type Stage = {
     name: string;
-    order: number;
+    order?: number;
     markers: Marker[];
 };
 
-export type Kev = {
+export type KevMarker = {
     name: string;
-    markers: Marker[];
+    triggers: Trigger[];
+};
+
+export type Kev = {
+    markers: KevMarker[];
 };
 
 export type ScriptCardType = {
     name: string;
     comment: string;
-    stages: Stage[];
+    script_text: { kev: Kev; stages: Stage[] };
 };

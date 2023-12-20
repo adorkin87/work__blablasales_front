@@ -5,7 +5,7 @@ interface HandleFetchResult {
 
 const handleFetchResult = ({ response, model }: HandleFetchResult): { value: object; state: StoreState } => {
     if (!response) {
-        return { value: model, state: 'error' };
+        return { value: { model }, state: 'error' };
     }
 
     if (Object.hasOwn(response, 'error')) {

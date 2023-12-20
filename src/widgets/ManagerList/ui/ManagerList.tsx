@@ -14,9 +14,15 @@ import { formatDate } from '../../../shared/lib/formateDate.ts';
 
 // store
 import StoreItemList from '../../../shared/store/baseStoreList.ts';
+import ModalConfirmDel from '../../ModalConfirmDel';
 
 const ManagerList = observer(() => {
     const navigate = useNavigate();
+
+    const [modalProps, setModalProps] = useState<{ open: boolean; selValue: number | string | false }>({
+        open: false,
+        selValue: false
+    });
 
     const [managerListStore] = useState(() => new StoreItemList('http://10.10.0.106:8001/api/v1/agent'));
 
@@ -24,35 +30,48 @@ const ManagerList = observer(() => {
         managerListStore.getList();
     }, []);
 
-    const handleBtnDel = () => {};
+    const handleBtnDel = (itemID: number | string): void => {
+        setModalProps({ open: true, selValue: itemID });
+    };
 
     return (
-        <Table stickyHeader borderAxis={'bothBetween'} size={'sm'}>
-            <thead>
-                <tr>
-                    <th style={{ backgroundColor: 'transparent' }}>Дата добавления</th>
-                    <th style={{ backgroundColor: 'transparent' }}>ФИО</th>
-                    <th style={{ backgroundColor: 'transparent' }}>Комментарий</th>
-                </tr>
-            </thead>
-            <tbody>
-                {Object.entries(managerListStore.value).map((manager) => (
-                    <tr key={manager[0]}>
-                        <td>{formatDate(manager[1]['adding_date'])}</td>
-                        <td>{manager[1]['agent_name']}</td>
-                        <td>
-                            <Stack justifyContent={'space-between'} alignItems={'center'}>
-                                {manager[1]['agent_comment']}
-                                <Box>
-                                    <AppBtnEdit onClick={() => navigate('/profile/managers/' + manager[0])} />
-                                    <AppBtnDel onClick={handleBtnDel} />
-                                </Box>
-                            </Stack>
-                        </td>
+        <>
+            <Table stickyHeader borderAxis={'bothBetween'}>
+                <thead>
+                    <tr>
+                        <th>Дата добавления</th>
+                        <th>ФИО</th>
+                        <th>Комментарий</th>
                     </tr>
-                ))}
-            </tbody>
-        </Table>
+                </thead>
+                <tbody>
+                    {Object.entries(managerListStore.value).map((manager) => (
+                        <tr key={manager[1]['agent_id']}>
+                            <td>{formatDate(manager[1]['adding_date'])}</td>
+                            <td>{manager[1]['agent_name']}</td>
+                            <td>
+                                <Stack
+                                    justifyContent={manager[1]['agent_comment'] ? 'space-between' : 'right'}
+                                    alignItems={'center'}>
+                                    {manager[1]['agent_comment']}
+                                    <Box>
+                                        <AppBtnEdit
+                                            onClick={() => navigate('/profile/managers/' + manager[1]['agent_id'])}
+                                        />
+                                        <AppBtnDel onClick={() => handleBtnDel(manager[1]['agent_id'])} />
+                                    </Box>
+                                </Stack>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+            <ModalConfirmDel
+                open={modalProps.open}
+                setOpen={setModalProps}
+                handleDel={() => managerListStore.delItem(modalProps.selValue)}
+            />
+        </>
     );
 });
 

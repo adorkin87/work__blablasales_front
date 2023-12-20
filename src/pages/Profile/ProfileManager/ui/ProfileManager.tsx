@@ -8,12 +8,11 @@ import { LeftPanelProfile } from '../../../../widgets/LeftPanel';
 import RightPanel from '../../../../shared/ui/RightPanel';
 import ManagerCard from '../../../../entities/ManagerCard';
 
-// store
-
 const ProfileManager = () => {
     const location = useLocation();
 
-    const managerID = location.pathname.split('/').at(-1) === 'add' ? false : location.pathname.split('/').at(-1);
+    const managerID: number | false =
+        location.pathname.split('/').at(-1) === 'add' ? false : Number(location.pathname.split('/').at(-1));
 
     return (
         <Stack>

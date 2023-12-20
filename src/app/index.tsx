@@ -16,6 +16,11 @@ const theme = extendTheme({
         //         }
         //     }
         // },
+        JoyTable: {
+            defaultProps: {
+                size: 'sm'
+            }
+        },
         JoyStack: {
             defaultProps: {
                 direction: 'row'
@@ -28,7 +33,19 @@ const theme = extendTheme({
         },
         JoyIconButton: {
             defaultProps: {
+                size: 'sm',
                 sx: { outline: 'none' }
+            }
+        },
+        JoyTooltip: {
+            defaultProps: {
+                enterDelay: 750,
+                enterNextDelay: 750
+            }
+        },
+        JoyInput: {
+            defaultProps: {
+                size: 'sm'
             }
         }
         // JoyTable: {

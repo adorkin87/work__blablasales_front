@@ -1,18 +1,18 @@
-import { useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // mui
-import { Stack, Sheet } from '@mui/joy';
+import { Stack } from '@mui/joy';
 
+// component
 import RightPanel from '../../../../shared/ui/RightPanel';
 import ScriptCard from '../../../../entities/ScriptCard';
 import LeftPanelScripts from '../../../../widgets/LeftPanel/ui/LeftPanelScripts.tsx';
 
 const Script = () => {
-    const tableRef = useCallback((node: any): void => {
-        if (node) {
-            node.style.height = node.offsetParent.offsetHeight - node.offsetTop - 32 + 'px';
-        }
-    }, []);
+    const location = useLocation();
+
+    const scriptID: number | false =
+        location.pathname.split('/').at(-1) === 'add' ? false : Number(location.pathname.split('/').at(-1));
 
     // *************************************************************************************************
     // render
@@ -21,9 +21,7 @@ const Script = () => {
         <Stack>
             <LeftPanelScripts />
             <RightPanel>
-                <Sheet ref={tableRef} sx={{ overflow: 'auto', bgcolor: '#fff' }}>
-                    <ScriptCard />
-                </Sheet>
+                <ScriptCard scriptID={scriptID} />
             </RightPanel>
         </Stack>
     );

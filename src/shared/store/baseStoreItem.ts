@@ -6,6 +6,7 @@ import { apiGetItems, apiAddItem, apiUpdItem } from '../api/baseRequest.api.ts';
 // func
 import handleFetchResult from '../lib/handleFetchResult.ts';
 import mwRequestToApi from '../middleware/requestToApi.mv';
+import { cloneDeep } from 'lodash';
 
 class StoreItem {
     initValue: { [key: string]: any };
@@ -25,8 +26,9 @@ class StoreItem {
             updStoreValue: action
         });
 
-        this.value = this.model = model;
         this.endpoint = endpoint;
+        this.initValue = {};
+        this.value = this.model = model;
 
         this.state = 'done';
     }
@@ -40,9 +42,13 @@ class StoreItem {
             if (accessToken) {
                 const fetchResult = yield mwRequestToApi(() => apiGetItems(this.endpoint, accessToken, getParams));
 
-                const resultHandler = handleFetchResult({ response: fetchResult, model: this.model });
+                const resultHandler: { value: { [key: string | number]: any }; state: StoreState } = handleFetchResult({
+                    response: fetchResult,
+                    model: this.model
+                });
 
-                this.initValue = this.value = Object.assign(this.value, resultHandler.value);
+                this.value = Object.assign(this.value, resultHandler.value[0]);
+                this.initValue = cloneDeep(this.value);
                 this.state = resultHandler.state;
             }
         }
@@ -54,60 +60,55 @@ class StoreItem {
 
             const accessToken: string | false = localStorage.getItem(import.meta.env.VITE_LS_ACCESS_TOKEN) || false;
 
-            for (const key of Object.keys(this.model)) {
-                this.value[key] = Number.isFinite(this.value[key]) ? Number(this.value[key]) : this.value[key];
+            // for (const key of Object.keys(this.model)) {
+            //     this.value[key] = Number.isFinite(this.value[key]) ? Number(this.value[key]) : this.value[key];
+            // }
+
+            if (accessToken) {
+                const fetchResult = yield mwRequestToApi(() => apiAddItem(this.endpoint, accessToken, this.value));
+
+                const resultHandler: { value: object; state: StoreState } = handleFetchResult({
+                    response: fetchResult,
+                    model: this.model
+                });
+
+                this.value = resultHandler.value;
+                this.initValue = cloneDeep(this.value);
+                this.state = resultHandler.state;
             }
-
-            const fetchResult = yield mwRequestToApi(() =>
-                apiAddItem({
-                    endpoint: this.endpoint,
-                    accessToken: localStorage.getItem(import.meta.env.VITE_LS_ACCESS_TOKEN),
-                    itemData: this.value
-                })
-            );
-
-            const resultHandler = handlerFetchResult({
-                model: this.model,
-                result: fetchResult
-            });
-
-            this.initValue = this.value = resultHandler.value;
-            this.state = resultHandler.state;
         }
     }
 
     *updItem(itemID: string | number): any {
-        this.state = 'pending';
-
         if (this.state !== 'pending') {
             this.state = 'pending';
 
+            console.log('here2');
+
             const accessToken: string | false = localStorage.getItem(import.meta.env.VITE_LS_ACCESS_TOKEN) || false;
 
-            for (const key of Object.keys(this.model)) {
-                this.value[key] = Number.isFinite(this.value[key]) ? Number(this.value[key]) : this.value[key];
+            // for (const key of Object.keys(this.model)) {
+            //     this.value[key] = Number.isFinite(this.value[key]) ? Number(this.value[key]) : this.value[key];
+            // }
+
+            if (accessToken) {
+                const fetchResult = yield mwRequestToApi(() =>
+                    apiUpdItem(`${this.endpoint}/${itemID}`, accessToken, this.value)
+                );
+
+                const resultHandler: { value: object; state: StoreState } = handleFetchResult({
+                    response: fetchResult,
+                    model: this.model
+                });
+
+                this.value = resultHandler.value;
+                this.initValue = cloneDeep(this.value);
+                this.state = resultHandler.state;
             }
-
-            const fetchResult = yield mwRequestToApi(() =>
-                apiUpdItem({
-                    endpoint: this.endpoint,
-                    accessToken: localStorage.getItem(import.meta.env.VITE_LS_ACCESS_TOKEN),
-                    itemID,
-                    itemData: this.value
-                })
-            );
-
-            const resultHandler = handlerFetchResult({
-                model: this.model,
-                result: fetchResult
-            });
-
-            this.initValue = this.value = resultHandler.value;
-            this.state = resultHandler.state;
         }
     }
 
-    updStoreValue(field, value) {
+    updStoreValue(field: string, value: any): void {
         if (!Object.hasOwn(this.value, field)) {
             this.initValue[field] = '';
         }

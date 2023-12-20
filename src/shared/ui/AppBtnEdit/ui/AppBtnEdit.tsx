@@ -7,7 +7,7 @@ interface AppBtnEdit {
 
 const AppBtnEdit = ({ onClick }: AppBtnEdit) => {
     return (
-        <IconButton size={'sm'} onClick={onClick}>
+        <IconButton onClick={onClick}>
             <EditNoteRoundedIcon />
         </IconButton>
     );

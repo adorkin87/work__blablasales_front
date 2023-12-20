@@ -7,7 +7,7 @@ interface AppBtnDel {
 
 const AppBtnDel = ({ onClick }: AppBtnDel) => {
     return (
-        <IconButton size={'sm'} onClick={onClick}>
+        <IconButton onClick={onClick}>
             <DeleteForeverRoundedIcon />
         </IconButton>
     );

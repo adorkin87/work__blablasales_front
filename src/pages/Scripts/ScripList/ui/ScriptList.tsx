@@ -76,7 +76,7 @@ const ScriptList = () => {
                         </Stack>
 
                         <Sheet ref={tableRef} sx={{ overflow: 'auto' }}>
-                            <Table stickyHeader hoverRow size={'sm'} bgcolor={'white'}>
+                            <Table stickyHeader hoverRow bgcolor={'white'}>
                                 <thead>
                                     <tr>
                                         <th colSpan={1}>Название скрипта</th>
@@ -89,10 +89,10 @@ const ScriptList = () => {
                                             <td>{script.name}</td>
                                             <td>{script.comment}</td>
                                             <td align={'right'}>
-                                                <IconButton size={'sm'} onClick={() => handleBtnEdit(index)}>
+                                                <IconButton onClick={() => handleBtnEdit(index)}>
                                                     <EditNoteRoundedIcon />
                                                 </IconButton>
-                                                <IconButton size={'sm'} onClick={() => handleBtnDel()}>
+                                                <IconButton onClick={() => handleBtnDel()}>
                                                     <DeleteForeverRoundedIcon />
                                                 </IconButton>
                                             </td>
