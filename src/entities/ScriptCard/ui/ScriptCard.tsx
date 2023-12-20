@@ -34,6 +34,12 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
         scriptID && scriptCardStore.getItem({ script_id: scriptID });
     }, []);
 
+    useEffect(() => {
+        if (!scriptID && Object.hasOwn(scriptCardStore.value, 'script_id')) {
+            navigate(`/scripts/${scriptCardStore.value['script_id']}`);
+        }
+    }, [scriptCardStore.value]);
+
     // *************************************************************************************************
     // handlers
 
@@ -112,7 +118,7 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
-    const handleUpdStageProps = (indexStage: number, field: 'name' | 'order', newValue: string) => {
+    const handleUpdStageProps = (indexStage: number, field: 'name' | 'order', newValue: string): void => {
         const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'][indexStage][field] = newValue;
         scriptCardStore.updStoreValue('script_text', updScript);
@@ -154,7 +160,12 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
-    const handleUpdTriggerProps = (indexStage: number, indexMarker: number, indexTrigger: number, newValue: string) => {
+    const handleUpdTriggerProps = (
+        indexStage: number,
+        indexMarker: number,
+        indexTrigger: number,
+        newValue: string
+    ): void => {
         const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'][indexStage]['markers'][indexMarker]['triggers'][indexTrigger]['phrase'] = newValue;
         scriptCardStore.updStoreValue('script_text', updScript);

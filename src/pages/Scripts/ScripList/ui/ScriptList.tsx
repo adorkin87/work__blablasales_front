@@ -1,20 +1,26 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
-//mui
+// mui
 import { Button, IconButton, Sheet, Stack, Table } from '@mui/joy';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 
-//components
+// components
 import LeftPanelScripts from '../../../../widgets/LeftPanel/ui/LeftPanelScripts.tsx';
 import RightPanel from '../../../../shared/ui/RightPanel';
 import ModalConfirmDel from '../../../../widgets/ModalConfirmDel';
 
-const ScriptList = () => {
+// store
+import StoreItemList from '../../../../shared/store/baseStoreList.ts';
+
+const ScriptList = observer(() => {
     const navigate = useNavigate();
 
     const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+    const [scriptListStore] = useState(() => new StoreItemList('http://10.10.0.106:8001/api/v1/script'));
 
     const tableRef = useCallback((node: any) => {
         if (node) {
@@ -22,30 +28,34 @@ const ScriptList = () => {
         }
     }, []);
 
-    const scriptList = [
-        { name: 'Скрипт 1', comment: 'Комментарий 1' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' },
-        { name: 'Скрипт 2', comment: 'Комментарий 2' }
-    ];
+    useEffect(() => {
+        scriptListStore.getList();
+    }, []);
+
+    // const scriptList = [
+    //     { name: 'Скрипт 1', comment: '' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' },
+    //     { name: 'Скрипт 2', comment: 'Комментарий 2' }
+    // ];
 
     // *************************************************************************************************
     // handlers
@@ -75,8 +85,8 @@ const ScriptList = () => {
                             <Button onClick={handleBtnAdd}>+ Добавить скрипт</Button>
                         </Stack>
 
-                        <Sheet ref={tableRef} sx={{ overflow: 'auto' }}>
-                            <Table stickyHeader hoverRow bgcolor={'white'}>
+                        <Sheet ref={tableRef} sx={{ overflow: 'auto', bgcolor: '#fff' }}>
+                            <Table stickyHeader hoverRow>
                                 <thead>
                                     <tr>
                                         <th colSpan={1}>Название скрипта</th>
@@ -84,7 +94,7 @@ const ScriptList = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {scriptList.map((script, index) => (
+                                    {Object.entries(scriptListStore.value).map((script: any, index: number) => (
                                         <tr key={index}>
                                             <td>{script.name}</td>
                                             <td>{script.comment}</td>
@@ -107,6 +117,6 @@ const ScriptList = () => {
             <ModalConfirmDel open={modalOpen} setOpen={setModalOpen} item={'test'} />
         </>
     );
-};
+});
 
 export default ScriptList;
