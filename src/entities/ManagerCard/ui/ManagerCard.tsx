@@ -34,11 +34,12 @@ const ManagerCard = observer(({ managerID }: ManagerCard) => {
 
     const handleBtnSave = (): void => {
         managerID ? managerCardStore.updItem(managerID) : managerCardStore.addItem();
+        setChangeValue(false);
     };
 
     const handleInputChange = (field: string, newValue: string): void => {
         managerCardStore.updStoreValue(field, newValue);
-        isEqual(managerCardStore.initValue, managerCardStore.value) ? setChangeValue(true) : setChangeValue(false);
+        isEqual(managerCardStore.initValue, managerCardStore.value) ? setChangeValue(false) : setChangeValue(true);
     };
 
     return (
@@ -59,10 +60,10 @@ const ManagerCard = observer(({ managerID }: ManagerCard) => {
                 sx={{ width: '500px' }}
             />
             <Stack marginTop={4} width={500} justifyContent={'right'} gap={2}>
-                <Button disabled={changeValue} onClick={handleBtnSave}>
+                <Button disabled={!changeValue} onClick={handleBtnSave}>
                     Сохранить
                 </Button>
-                <Button onClick={() => navigate(-1)}>Отмена</Button>
+                <Button onClick={() => navigate('/profile/managers')}>Закрыть</Button>
             </Stack>
         </Stack>
     );

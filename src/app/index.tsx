@@ -9,13 +9,6 @@ import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
 
 const theme = extendTheme({
     components: {
-        // JoyDivider: {
-        //     styleOverrides: {
-        //         root: {
-        //             backgroundColor: '#fff'
-        //         }
-        //     }
-        // },
         JoyTable: {
             defaultProps: {
                 size: 'sm'
@@ -47,12 +40,12 @@ const theme = extendTheme({
             defaultProps: {
                 size: 'sm'
             }
+        },
+        JoySelect: {
+            defaultProps: {
+                size: 'sm'
+            }
         }
-        // JoyTable: {
-        //     defaultProps: {
-        //         sx: { borderRadius: 10 }
-        //     }
-        // }
     }
 });
 

@@ -28,7 +28,8 @@ class StoreItem {
 
         this.endpoint = endpoint;
         this.initValue = {};
-        this.value = this.model = model;
+        this.model = model;
+        this.value = cloneDeep(this.model);
 
         this.state = 'done';
     }
@@ -83,8 +84,6 @@ class StoreItem {
         if (this.state !== 'pending') {
             this.state = 'pending';
 
-            console.log('here2');
-
             const accessToken: string | false = localStorage.getItem(import.meta.env.VITE_LS_ACCESS_TOKEN) || false;
 
             // for (const key of Object.keys(this.model)) {
@@ -109,6 +108,9 @@ class StoreItem {
     }
 
     updStoreValue(field: string, value: any): void {
+        if (field === 'file') {
+            console.log(value);
+        }
         if (!Object.hasOwn(this.value, field)) {
             this.initValue[field] = '';
         }
@@ -116,7 +118,8 @@ class StoreItem {
     }
 
     setEmptyValue() {
-        this.initValue = this.value = this.model;
+        this.value = cloneDeep(this.model);
+        this.initValue = cloneDeep(this.model);
         this.state = 'done';
     }
 }

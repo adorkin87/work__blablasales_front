@@ -1,4 +1,4 @@
-import { makeObservable, observable, flow } from 'mobx';
+import { makeObservable, observable, flow, action } from 'mobx';
 
 // api
 import { apiGetItems, apiDelItem } from '../api/baseRequest.api.ts';
@@ -6,6 +6,7 @@ import { apiGetItems, apiDelItem } from '../api/baseRequest.api.ts';
 // func
 import handleFetchResult from '../lib/handleFetchResult.ts';
 import mwRequestToApi from '../middleware/requestToApi.mv';
+import { cloneDeep } from 'lodash';
 
 class StoreItemList {
     value: { [key: string]: any };
@@ -18,7 +19,8 @@ class StoreItemList {
             value: observable,
             state: observable,
             getList: flow,
-            delItem: flow
+            delItem: flow,
+            resetValue: action
         });
 
         this.value = this.model = model;
@@ -59,6 +61,10 @@ class StoreItemList {
                 this.state = resultHandler.state;
             }
         }
+    }
+
+    resetValue() {
+        this.value = cloneDeep(this.model);
     }
 }
 

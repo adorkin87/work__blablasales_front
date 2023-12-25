@@ -1,82 +1,68 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 //mui
-import { Box, Button, IconButton, Typography, Select, Sheet, Stack, Table, Tooltip } from '@mui/joy';
+import { Box, IconButton, Sheet, Stack, Table, Tooltip } from '@mui/joy';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
 //components
 import { LeftPanelConversation } from '../../../../widgets/LeftPanel';
 import RightPanel from '../../../../shared/ui/RightPanel';
-
-//stores
+import { SelectManagers, SelectScripts } from '../../../../features/Conversations';
+import BtnUploadAudio from '../../../../features/Conversations/BtnUploadAudio/ui/BtnUploadAudio.tsx';
+import PlayAudio from '../../../../features/Conversations/PlayAudio/PlayAudio.tsx';
+import DurationAudio from '../../../../features/Conversations/DurationAudio/DurationAudio.tsx';
 
 const ConversationUpload = observer(() => {
-    const [uploadedFiles, setUploadedFiles] = useState({});
+    // state
+    const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+    const [selectedManager, setSelectedManager] = useState<number>(0);
+    const [selectedScript, setSelectedScript] = useState<number>(0);
 
-    // const handleUploadFiles = (files): void => {
-    //     const uploaded = [...uploadedFiles];
-    //     let limitExceeded = false;
-    //     files.some((file) => {
-    //         if (uploaded.findIndex((f) => f.name === file.name) === -1) {
-    //             uploaded.push(file);
-    //             if (uploaded.length > MAX_COUNT) {
-    //                 alert(`You can only add a maximum of ${MAX_COUNT} files`);
-    //                 setFileLimit(false);
-    //                 limitExceeded = true;
-    //                 return true;
-    //             }
-    //         }
-    //     });
-    //     if (!limitExceeded) setUploadedFiles(uploaded);
-    // };
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        const uploaded: File[] = [...uploadedFiles];
+        const upload: File[] = Array.prototype.slice.call(e.target.files);
 
-    const handleFileEvent = (e): void => {
-        setUploadedFiles(e.target.files);
+        upload.some((file: File): void => {
+            if (
+                uploaded.findIndex((f: File): boolean => f.name === file.name) === -1 &&
+                file.type.startsWith('audio/')
+            ) {
+                uploaded.push(file);
+            }
+        });
+
+        setUploadedFiles(uploaded);
     };
 
-    // useEffect(() => {
-    //     if (Object.keys(uploadedFiles).length > 0) {
-    //         const reader = new FileReader();
-    //         reader.onload = (e) => console.log(e.target.result);
-    //         reader.readAsText(uploadedFiles[0]);
-    //     }
-    // }, [uploadedFiles]);
-
-    // const ttt = (file) => {
-    //     // console.log(file);
-    //     const reader = new FileReader();
-    //     let temp;
-    //     reader.onload = (e) => console.log(e.target.duration);
-    //     reader.readAsText(file);
-    //     return 'tesft';
-    // };
+    const handleBtnDel = (indexAudio: number): void => {
+        const newArrayFiles: File[] = [...uploadedFiles];
+        newArrayFiles.splice(indexAudio, 1);
+        setUploadedFiles(newArrayFiles);
+    };
 
     // *************************************************************************************************
+    // render
 
     return (
         <Stack>
             <LeftPanelConversation />
             <RightPanel>
-                <Stack marginBottom={4} alignItems={'end'} gap={4}>
+                <Stack marginBottom={4} alignItems={'end'} gap={8}>
                     <input
                         id={'fileUpload'}
                         type={'file'}
                         multiple
                         accept={'audio/*'}
                         style={{ display: 'none' }}
-                        onChange={handleFileEvent}
+                        onChange={handleInputChange}
                     />
                     <label htmlFor={'fileUpload'}>
                         <Box sx={{ padding: 1, bgcolor: 'blue', color: '#fff', cursor: 'pointer' }}>Добавить аудио</Box>
                     </label>
-                    <Stack direction={'column'}>
-                        <Typography>Менеджер</Typography>
-                        <Select size={'sm'} placeholder={'...'} sx={{ width: 200 }} />
-                    </Stack>
-                    <Stack direction={'column'}>
-                        <Typography>Скрипт</Typography>
-                        <Select size={'sm'} placeholder={'...'} sx={{ width: 200 }} />
+                    <Stack gap={4}>
+                        <SelectManagers selectedManager={selectedManager} setSelectedManager={setSelectedManager} />
+                        <SelectScripts selectedScript={selectedScript} setSelectedScript={setSelectedScript} />
                     </Stack>
                 </Stack>
                 <Sheet sx={{ overflow: 'auto' }}>
@@ -84,26 +70,31 @@ const ConversationUpload = observer(() => {
                         <thead>
                             <tr>
                                 <th>Название файла</th>
-                                <th width={'30%'} />
+                                <th />
                             </tr>
                         </thead>
                         <tbody>
-                            {Object.entries(uploadedFiles).length > 0 &&
-                                Object.entries(uploadedFiles).map((file, i) => (
-                                    <tr key={i}>
-                                        <Tooltip placement={'top-start'} enterDelay={1000} title={file[1].name}>
-                                            <td>{file[1].name}</td>
-                                        </Tooltip>
-                                        <td align={'right'}>
-                                            <Stack justifyContent={'end'} alignItems={'center'} gap={2}>
-                                                <Button size={'sm'}>Обработать</Button>
-                                                <IconButton size={'sm'} onClick={() => console.log('here')}>
-                                                    <DeleteForeverRoundedIcon />
-                                                </IconButton>
-                                            </Stack>
-                                        </td>
-                                    </tr>
-                                ))}
+                            {Object.entries(uploadedFiles).map((file, indexAudio: number) => (
+                                <tr key={'index' + indexAudio + '/' + file[1].name}>
+                                    <Tooltip placement={'top-start'} title={file[1].name}>
+                                        <td>{file[1].name}</td>
+                                    </Tooltip>
+                                    <td align={'right'}>
+                                        <Stack justifyContent={'end'} alignItems={'center'} gap={1}>
+                                            <DurationAudio file={file[1]} />
+                                            <PlayAudio file={uploadedFiles[indexAudio]} />
+                                            <BtnUploadAudio
+                                                file={uploadedFiles[indexAudio]}
+                                                agent={selectedManager}
+                                                script={selectedScript}
+                                            />
+                                            <IconButton onClick={() => handleBtnDel(indexAudio)}>
+                                                <DeleteForeverRoundedIcon />
+                                            </IconButton>
+                                        </Stack>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </Table>
                 </Sheet>

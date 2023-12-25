@@ -4,11 +4,12 @@ import { Button, Divider } from '@mui/joy';
 
 interface PropsModal {
     open: boolean;
-    setOpen: (newValue: object) => void;
+    setOpen: (newValue: boolean) => void;
     handleDel: () => void;
+    text?: string;
 }
 
-const ModalConfirmDel = ({ open, setOpen, handleDel }: PropsModal) => {
+const ModalConfirmDel = ({ open, setOpen, handleDel, text }: PropsModal) => {
     const handleBtnDel = (): void => {
         handleDel();
         setOpen(false);
@@ -20,7 +21,9 @@ const ModalConfirmDel = ({ open, setOpen, handleDel }: PropsModal) => {
                 <ModalClose />
                 <DialogTitle>Внимание</DialogTitle>
                 <Divider />
-                <DialogContent>Вы уверенны? Это действие нельзя отменить!</DialogContent>
+                <DialogContent>
+                    Действительно удалить{text ? `: ${text}` : ''}? Это действие нельзя отменить
+                </DialogContent>
                 <DialogActions>
                     <Button onClick={handleBtnDel} color={'danger'}>
                         Удалить
