@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { Stack, Input, Button } from '@mui/joy';
 
 //stores
-import authStore from '../../../shared/auth';
+import authStore from 'src/shared/auth';
 
 const Login = observer(() => {
     const [valueLogin, setValueLogin] = useState<string>('');

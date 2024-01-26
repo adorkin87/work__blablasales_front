@@ -1,5 +1,5 @@
 import LeftPanelScripts from './ui/LeftPanelScripts.tsx';
-import LeftPanelConversation from './ui/LeftPanelConversation.tsx';
+import LeftPanelRecords from './ui/LeftPanelRecords.tsx';
 import LeftPanelAnalytics from './ui/LeftPanelAnalytics.tsx';
 import LeftPanelProfile from './ui/LeftPanelProfile.tsx';
-export { LeftPanelScripts, LeftPanelConversation, LeftPanelAnalytics, LeftPanelProfile };
+export { LeftPanelScripts, LeftPanelRecords, LeftPanelAnalytics, LeftPanelProfile };

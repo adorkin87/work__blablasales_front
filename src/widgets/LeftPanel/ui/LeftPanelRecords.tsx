@@ -4,9 +4,9 @@ import { Link as ReactLink, useLocation } from 'react-router-dom';
 import { Link, Stack } from '@mui/joy';
 
 //components
-import AppLeftPanel from '../../../shared/ui/AppLeftPanel';
+import AppLeftPanel from 'src/shared/ui/AppLeftPanel';
 
-const LeftPanelConversation = () => {
+const LeftPanelRecords = () => {
     const location = useLocation();
 
     const currentSection =
@@ -20,7 +20,7 @@ const LeftPanelConversation = () => {
             <Stack direction={'column'} gap={2}>
                 <Link
                     component={ReactLink}
-                    to={'/conversation/upload'}
+                    to={'/records/upload'}
                     underline={currentSection === 'upload' ? 'always' : 'hover'}
                     sx={{
                         color: currentSection === 'upload' ? '#65e4a3' : '#fff',
@@ -40,4 +40,4 @@ const LeftPanelConversation = () => {
     );
 };
 
-export default LeftPanelConversation;
+export default LeftPanelRecords;

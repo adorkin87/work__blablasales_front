@@ -3181,7 +3181,7 @@ define(['exports'], function (exports) {
       https://opensource.org/licenses/MIT.
     */
     /**
-     * ConversationUpload a `fetch` listener to the service worker that will
+     * RecordsUploadPage a `fetch` listener to the service worker that will
      * respond to
      * [network requests]{@link https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers#Custom_responses_to_requests}
      * with precached assets.

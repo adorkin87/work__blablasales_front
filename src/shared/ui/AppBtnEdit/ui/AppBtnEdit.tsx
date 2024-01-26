@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/joy';
+import { IconButton, Tooltip } from '@mui/joy';
 import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 
 interface AppBtnEdit {
@@ -7,9 +7,11 @@ interface AppBtnEdit {
 
 const AppBtnEdit = ({ onClick }: AppBtnEdit) => {
     return (
-        <IconButton onClick={onClick}>
-            <EditNoteRoundedIcon />
-        </IconButton>
+        <Tooltip title={'редактировать'} placement={'top-end'}>
+            <IconButton onClick={onClick}>
+                <EditNoteRoundedIcon />
+            </IconButton>
+        </Tooltip>
     );
 };
 

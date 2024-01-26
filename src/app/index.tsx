@@ -1,59 +1,19 @@
 import { BrowserRouter } from 'react-router-dom';
 
 import '@fontsource/inter';
-import '../shared/styles/reset.scss';
-import '../shared/styles/base.scss';
-import '../shared/styles/var.scss';
+import 'src/shared/styles/reset.scss';
+import 'src/shared/styles/var.scss';
+import 'src/shared/styles/base.scss';
+import 'src/shared/styles/fonts.scss';
 
-import { CssVarsProvider, extendTheme } from '@mui/joy/styles';
+import { CssVarsProvider } from '@mui/joy/styles';
 
-const theme = extendTheme({
-    components: {
-        JoyTable: {
-            defaultProps: {
-                size: 'sm'
-            }
-        },
-        JoyStack: {
-            defaultProps: {
-                direction: 'row'
-            }
-        },
-        JoyLink: {
-            defaultProps: {
-                fontSize: '20px'
-            }
-        },
-        JoyIconButton: {
-            defaultProps: {
-                size: 'sm',
-                sx: { outline: 'none' }
-            }
-        },
-        JoyTooltip: {
-            defaultProps: {
-                enterDelay: 750,
-                enterNextDelay: 750
-            }
-        },
-        JoyInput: {
-            defaultProps: {
-                size: 'sm'
-            }
-        },
-        JoySelect: {
-            defaultProps: {
-                size: 'sm'
-            }
-        }
-    }
-});
-
-import AppRouter from './providers/AppRouter';
+import AppRouter from './providers/AppRouter/AppRouter';
+import AppTheme from './providers/AppTheme/AppTheme.ts';
 
 const App = () => {
     return (
-        <CssVarsProvider theme={theme}>
+        <CssVarsProvider theme={AppTheme}>
             <BrowserRouter>
                 <AppRouter />
             </BrowserRouter>

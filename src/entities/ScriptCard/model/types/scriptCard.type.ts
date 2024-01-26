@@ -1,32 +1,30 @@
-export type Trigger = {
+export type TTrigger = {
     phrase: string;
     normal?: string[];
 };
 
-export type Marker = {
+export type TMarker = {
     name: string;
-    order?: number;
     weight?: number;
-    triggers: Trigger[];
+    triggers: TTrigger[];
 };
 
-export type Stage = {
+export type TStage = {
     name: string;
-    order?: number;
-    markers: Marker[];
+    markers: TMarker[];
 };
 
-export type KevMarker = {
+export type TKevMarker = {
     name: string;
-    triggers: Trigger[];
+    triggers: TTrigger[];
 };
 
-export type Kev = {
-    markers: KevMarker[];
+export type TKev = {
+    markers: TKevMarker[];
 };
 
-export type ScriptCardType = {
+export type TScriptCard = {
     name: string;
     comment: string;
-    script_text: { kev: Kev; stages: Stage[] };
+    script_text: { kev: TKev; stages: TStage[] };
 };

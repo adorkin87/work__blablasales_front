@@ -22,7 +22,7 @@ const ManagerList = observer(() => {
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [modalSelectedItem, setModalSelectedItem] = useState<{ itemID?: number | string; itemName?: string }>({});
 
-    const [managerListStore] = useState(() => new StoreItemList('http://10.10.0.106:8001/api/v1/agent'));
+    const [managerListStore] = useState(() => new StoreItemList(import.meta.env.VITE_ENDPOINT_AGENT));
 
     useEffect(() => {
         managerListStore.getList();

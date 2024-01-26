@@ -1,4 +1,4 @@
 import { lazy } from 'react';
-const ScriptList = lazy(() => import('./ScripList/ui/ScriptList'));
-const Script = lazy(() => import('./Script/ui/Script'));
-export { ScriptList, Script };
+const ScriptsListPage = lazy(() => import('./ScriptsListPage/ui/ScriptsListPage.tsx'));
+const ScriptPage = lazy(() => import('./ScriptPage/ui/ScriptPage.tsx'));
+export { ScriptsListPage, ScriptPage };

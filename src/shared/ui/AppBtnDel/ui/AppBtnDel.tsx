@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/joy';
+import { IconButton, Tooltip } from '@mui/joy';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
 interface AppBtnDel {
@@ -7,9 +7,11 @@ interface AppBtnDel {
 
 const AppBtnDel = ({ onClick }: AppBtnDel) => {
     return (
-        <IconButton onClick={onClick}>
-            <DeleteForeverRoundedIcon />
-        </IconButton>
+        <Tooltip title={'удалить'} placement={'top-end'}>
+            <IconButton onClick={onClick}>
+                <DeleteForeverRoundedIcon />
+            </IconButton>
+        </Tooltip>
     );
 };
 

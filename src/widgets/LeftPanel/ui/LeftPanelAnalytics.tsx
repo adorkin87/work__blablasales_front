@@ -4,7 +4,7 @@ import { Link as ReactLink, useLocation } from 'react-router-dom';
 import { Link, Stack } from '@mui/joy';
 
 //components
-import AppLeftPanel from '../../../shared/ui/AppLeftPanel';
+import AppLeftPanel from 'src/shared/ui/AppLeftPanel';
 
 const LeftPanelAnalytics = () => {
     const location = useLocation();

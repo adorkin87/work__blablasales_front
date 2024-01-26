@@ -9,7 +9,7 @@ import { Button, Sheet, Stack, Table } from '@mui/joy';
 import LeftPanelScripts from '../../../../widgets/LeftPanel/ui/LeftPanelScripts.tsx';
 import RightPanel from '../../../../shared/ui/RightPanel';
 import ModalConfirmDel from '../../../../widgets/ModalConfirmDel';
-import AppBtnEdit from '../../../../shared/ui/AppBtnEdit';
+import AppBtnEdit from 'src/shared/ui/AppBtnEdit';
 import AppBtnDel from '../../../../shared/ui/AppBtnDel';
 import AppBtnCopy from '../../../../shared/ui/AppBtnCopy';
 
@@ -17,14 +17,14 @@ import AppBtnCopy from '../../../../shared/ui/AppBtnCopy';
 import StoreItemList from '../../../../shared/store/baseStoreList.ts';
 import StoreItem from '../../../../shared/store/baseStoreItem.ts';
 
-const ScriptList = observer(() => {
+const ScriptsListPage = observer(() => {
     const navigate = useNavigate();
 
     const [modalOpen, setModalOpen] = useState<boolean>(false);
     const [modalSelectedItem, setModalSelectedItem] = useState<{ itemID?: number | string; itemName?: string }>({});
 
-    const [scriptListStore] = useState(() => new StoreItemList('http://10.10.0.106:8001/api/v1/script'));
-    const [scriptCardStore] = useState(() => new StoreItem('http://10.10.0.106:8001/api/v1/script', {}));
+    const [scriptListStore] = useState(() => new StoreItemList(import.meta.env.VITE_ENDPOINT_SCRIPT));
+    const [scriptCardStore] = useState(() => new StoreItem(import.meta.env.VITE_ENDPOINT_SCRIPT));
 
     const tableRef = useCallback((node: any) => {
         if (node) {
@@ -122,4 +122,4 @@ const ScriptList = observer(() => {
     );
 });
 
-export default ScriptList;
+export default ScriptsListPage;

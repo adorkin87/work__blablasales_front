@@ -14,7 +14,7 @@ interface SelectScript {
 }
 
 const SelectScripts = observer(({ selectedScript, setSelectedScript }: SelectScript) => {
-    const [scriptListStore] = useState(() => new StoreItemList('http://10.10.0.106:8001/api/v1/script'));
+    const [scriptListStore] = useState(() => new StoreItemList(import.meta.env.VITE_ENDPOINT_SCRIPT));
 
     useEffect((): void => {
         scriptListStore.getList();

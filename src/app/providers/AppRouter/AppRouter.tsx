@@ -3,18 +3,20 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 //pages
-import Login from '../../../../pages/Login';
-import { ConversationList, ConversationUpload } from '../../../../pages/Conversations';
-import { ScriptList, Script } from '../../../../pages/Scripts';
-import Analytics from '../../../../pages/Analytics';
-import { ProfileRequisites, ProfileManagers, ProfileManager } from '../../../../pages/Profile';
-import NotFound from '../../../../pages/NotFound';
+import Login from 'src/pages/Login';
+import { RecordsListPage, RecordsUploadPage } from 'src/pages/Records';
+import { ScriptsListPage, ScriptPage } from 'src/pages/Scripts';
+import Analytics from 'src/pages/Analytics';
+import { ProfileRequisites, ProfileManagers, ProfileManager } from 'src/pages/Profile';
+import NotFound from 'src/pages/NotFound';
+
+import Dnd from 'src/pages/Dnd/Dnd.tsx';
 
 //components
-import TopPanel from '../../../../widgets/TopPanel';
+import TopPanel from 'src/widgets/TopPanel';
 
 //stores
-import authStore from '../../../../shared/auth';
+import authStore from 'src/shared/auth';
 
 const AppRouter = observer(() => {
     const location = useLocation();
@@ -38,11 +40,12 @@ const AppRouter = observer(() => {
                     <TopPanel />
                     <Suspense fallback={<p>Loading...</p>}>
                         <Routes>
-                            <Route path={'/'} element={<ConversationList />} />
-                            <Route path={'/conversation/:upload'} element={<ConversationUpload />} />
-                            <Route path={'/scripts'} element={<ScriptList />} />
-                            <Route path={'/scripts/add'} element={<Script />} />
-                            <Route path={'/scripts/:slug'} element={<Script />} />
+                            <Route path={'/'} element={<RecordsListPage />} />
+                            <Route path={'/dnd'} element={<Dnd />} />
+                            <Route path={'/records/upload'} element={<RecordsUploadPage />} />
+                            <Route path={'/scripts'} element={<ScriptsListPage />} />
+                            <Route path={'/scripts/add'} element={<ScriptPage />} />
+                            <Route path={'/scripts/:slug'} element={<ScriptPage />} />
                             <Route path={'/analytics'} element={<Analytics />} />
                             <Route path={'/profile'} element={<ProfileRequisites />} />
                             <Route path={'/profile/managers'} element={<ProfileManagers />} />

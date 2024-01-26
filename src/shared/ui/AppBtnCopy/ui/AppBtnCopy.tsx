@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/joy';
+import { IconButton, Tooltip } from '@mui/joy';
 import CopyAllRoundedIcon from '@mui/icons-material/CopyAllRounded';
 
 interface AppBtnCopy {
@@ -7,9 +7,11 @@ interface AppBtnCopy {
 
 const AppBtnCopy = ({ onClick }: AppBtnCopy) => {
     return (
-        <IconButton onClick={onClick}>
-            <CopyAllRoundedIcon />
-        </IconButton>
+        <Tooltip title={'копировать'} placement={'top-end'}>
+            <IconButton onClick={onClick}>
+                <CopyAllRoundedIcon />
+            </IconButton>
+        </Tooltip>
     );
 };
 

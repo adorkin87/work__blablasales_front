@@ -10,12 +10,12 @@ const RightPanel = ({ children }: Props) => {
     const panelRef = useCallback((node: any) => {
         if (node) {
             node.style.height = node.offsetParent.offsetHeight - node.offsetTop + 'px';
-            node.style.width = node.offsetParent.offsetWidth - node.offsetLeft + 'px';
+            // node.style.width = node.offsetParent.offsetWidth - node.offsetLeft + 'px';
         }
     }, []);
 
     return (
-        <Box ref={panelRef} padding={4} overflow={'auto'}>
+        <Box ref={panelRef} width={'100%'} padding={4} overflow={'auto'} sx={{ bgcolor: '#efefef' }}>
             {children}
         </Box>
     );

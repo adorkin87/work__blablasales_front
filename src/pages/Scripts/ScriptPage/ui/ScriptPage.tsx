@@ -8,7 +8,7 @@ import RightPanel from '../../../../shared/ui/RightPanel';
 import ScriptCard from '../../../../entities/ScriptCard';
 import LeftPanelScripts from '../../../../widgets/LeftPanel/ui/LeftPanelScripts.tsx';
 
-const Script = () => {
+const ScriptPage = () => {
     const location = useLocation();
 
     const scriptID: number | false =
@@ -27,4 +27,4 @@ const Script = () => {
     );
 };
 
-export default Script;
+export default ScriptPage;

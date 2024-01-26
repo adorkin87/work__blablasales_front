@@ -6,7 +6,7 @@ const mwRequestToApi = async (request: any): Promise<any> => {
     do {
         fetchResult = await request().then((r: any) => r);
 
-        import.meta.env.MODE === 'development' && console.log(fetchResult);
+        import.meta.env.DEV && console.log(fetchResult);
 
         if (fetchResult?.['error'] === 'Access token has expired!') {
             await storeAuth.checkToken();

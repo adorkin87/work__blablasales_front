@@ -14,7 +14,7 @@ interface SelectManagers {
 }
 
 const SelectManagers = observer(({ selectedManager, setSelectedManager }: SelectManagers) => {
-    const [managerListStore] = useState(() => new StoreItemList('http://10.10.0.106:8001/api/v1/agent'));
+    const [managerListStore] = useState(() => new StoreItemList(import.meta.env.VITE_ENDPOINT_AGENT));
 
     useEffect((): void => {
         managerListStore.getList();
@@ -27,10 +27,17 @@ const SelectManagers = observer(({ selectedManager, setSelectedManager }: Select
     };
 
     return (
-        <Stack direction={'column'} gap={1}>
-            <Typography>Менеджер</Typography>
+        <Stack direction={'column'} gap={0.5}>
+            {/*<Typography level={'body-xs'}>Менеджер</Typography>*/}
+            <label htmlFor={'select-managers'}>Менеджеры Status</label>
             <Select
                 startDecorator={<SupportAgentRoundedIcon />}
+                slotProps={{
+                    button: {
+                        id: 'select-managers',
+                        'aria-labelledby': 'select-label select-button'
+                    }
+                }}
                 value={selectedManager}
                 sx={{ width: 250 }}
                 onChange={handleSelectChange}>

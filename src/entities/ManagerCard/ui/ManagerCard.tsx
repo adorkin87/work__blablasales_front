@@ -20,7 +20,7 @@ const ManagerCard = observer(({ managerID }: ManagerCard) => {
 
     const [changeValue, setChangeValue] = useState<boolean>(false);
 
-    const [managerCardStore] = useState(() => new StoreItem('http://10.10.0.106:8001/api/v1/agent'));
+    const [managerCardStore] = useState(() => new StoreItem(import.meta.env.VITE_ENDPOINT_AGENT));
 
     useEffect(() => {
         managerID && managerCardStore.getItem({ agent_id: managerID });

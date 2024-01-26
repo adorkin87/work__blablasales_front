@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 // types
-import { Kev, KevMarker, Marker, Stage, Trigger } from '../model/types/scriptCard.type.ts';
+import { TKev, TKevMarker, TTrigger, TStage, TMarker } from '../model/types/scriptCard.type.ts';
 
 // mui
 import { IconButton, Input, Stack, Table, Button, Tooltip, Sheet } from '@mui/joy';
@@ -23,7 +23,7 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
     // store
     const [scriptCardStore] = useState(
         () =>
-            new StoreItem('http://10.10.0.106:8001/api/v1/script', {
+            new StoreItem(import.meta.env.VITE_ENDPOINT_SCRIPT, {
                 script_name: '',
                 script_comment: '',
                 script_text: { kev: { markers: [] }, stages: [] }
@@ -68,37 +68,37 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
     // kev
 
     const handleAddKevMarker = (): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['kev']['markers'].push({ name: '', triggers: [] });
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
     const handleDelKevMarker = (indexMarker: number): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['kev']['markers'].splice(indexMarker, 1);
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
     const handleUpdKevMarker = (indexMarker: number, newValue: string): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['kev']['markers'][indexMarker]['name'] = newValue;
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
     const handleAddKevTrigger = (indexMarker: number): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['kev']['markers'][indexMarker]['triggers'].push({ phrase: '' });
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
     const handleDelKevTrigger = (indexMarker: number, indexTrigger: number): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['kev']['markers'][indexMarker]['triggers'].splice(indexTrigger, 1);
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
     const handleUpdKevTrigger = (indexMarker: number, indexTrigger: number, newValue: string): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['kev']['markers'][indexMarker]['triggers'][indexTrigger]['phrase'] = newValue;
         scriptCardStore.updStoreValue('script_text', updScript);
     };
@@ -107,19 +107,19 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
     // stages
 
     const handleAddStage = (): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'].push({ name: '', markers: [] });
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
     const handleDelStage = (indexStage: number): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'].splice(indexStage, 1);
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
     const handleUpdStageProps = (indexStage: number, field: 'name' | 'order', newValue: string): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'][indexStage][field] = newValue;
         scriptCardStore.updStoreValue('script_text', updScript);
     };
@@ -128,19 +128,19 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
     // markers
 
     const handleAddMarker = (indexStage: number): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'][indexStage]['markers'].push({ name: '', triggers: [] });
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
     const handleDelMarker = (indexStage: number, indexMarker: number): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'][indexStage]['markers'].splice(indexMarker, 1);
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
     const handleUpdMarkerProps = (indexStage: number, indexMarker: number, field: string, newValue: string) => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'][indexStage]['markers'][indexMarker][field] = newValue;
         scriptCardStore.updStoreValue('script_text', updScript);
     };
@@ -149,13 +149,13 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
     // triggers
 
     const handleAddTrigger = (indexStage: number, indexMarker: number): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'][indexStage]['markers'][indexMarker]['triggers'].push({ phrase: '' });
         scriptCardStore.updStoreValue('script_text', updScript);
     };
 
     const handleDelTrigger = (indexStage: number, indexMarker: number, indexTrigger: number): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'][indexStage]['markers'][indexMarker]['triggers'].splice(indexTrigger, 1);
         scriptCardStore.updStoreValue('script_text', updScript);
     };
@@ -166,7 +166,7 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
         indexTrigger: number,
         newValue: string
     ): void => {
-        const updScript: { kev: Kev; stages: Stage[] } = { ...scriptCardStore.value['script_text'] };
+        const updScript: { kev: TKev; stages: TStage[] } = { ...scriptCardStore.value['script_text'] };
         updScript['stages'][indexStage]['markers'][indexMarker]['triggers'][indexTrigger]['phrase'] = newValue;
         scriptCardStore.updStoreValue('script_text', updScript);
     };
@@ -218,7 +218,7 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
                                 <Table>
                                     <tbody>
                                         {scriptCardStore.value['script_text']['kev']['markers'].map(
-                                            (marker: KevMarker, indexMarker: number) => (
+                                            (marker: TKevMarker, indexMarker: number) => (
                                                 <tr key={indexMarker}>
                                                     <td>
                                                         <Stack gap={1}>
@@ -243,7 +243,7 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
                                                         <Table>
                                                             <tbody>
                                                                 {marker['triggers'].map(
-                                                                    (trigger: Trigger, indexTrigger: number) => (
+                                                                    (trigger: TTrigger, indexTrigger: number) => (
                                                                         <tr key={indexTrigger}>
                                                                             <td>
                                                                                 <Stack>
@@ -314,7 +314,7 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
                                 </Table>
                             </td>
                         </tr>
-                        {scriptCardStore.value['script_text']['stages'].map((stage: Stage, indexStage: number) => (
+                        {scriptCardStore.value['script_text']['stages'].map((stage: TStage, indexStage: number) => (
                             <tr key={indexStage}>
                                 <td>
                                     <Stack gap={1}>
@@ -323,12 +323,6 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
                                             placeholder={'название этапа'}
                                             value={stage['name']}
                                             onChange={(e) => handleUpdStageProps(indexStage, 'name', e.target.value)}
-                                        />
-                                        <Input
-                                            placeholder={'п/п'}
-                                            value={stage['order']}
-                                            onChange={(e) => handleUpdStageProps(indexStage, 'order', e.target.value)}
-                                            sx={{ width: 60 }}
                                         />
                                         <Tooltip title={'Удалить этап'} placement={'top-end'}>
                                             <IconButton onClick={() => handleDelStage(indexStage)}>
@@ -341,7 +335,7 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
                                     <Table borderAxis={'bothBetween'} bgcolor={'white'}>
                                         <tbody>
                                             {scriptCardStore.value['script_text']['stages'][indexStage]['markers'].map(
-                                                (marker: Marker, indexMarker: number) => (
+                                                (marker: TMarker, indexMarker: number) => (
                                                     <tr key={indexMarker}>
                                                         <td>
                                                             <Stack gap={1}>
@@ -357,19 +351,6 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
                                                                             e.target.value
                                                                         )
                                                                     }
-                                                                />
-                                                                <Input
-                                                                    value={marker['order']}
-                                                                    placeholder={'п/п'}
-                                                                    onChange={(e) =>
-                                                                        handleUpdMarkerProps(
-                                                                            indexStage,
-                                                                            indexMarker,
-                                                                            'order',
-                                                                            e.target.value
-                                                                        )
-                                                                    }
-                                                                    sx={{ width: 60 }}
                                                                 />
                                                                 <Input
                                                                     value={marker['weight']}
@@ -400,7 +381,7 @@ const ScriptCard = observer(({ scriptID }: ScriptCard) => {
                                                                     {scriptCardStore.value['script_text']['stages'][
                                                                         indexStage
                                                                     ]['markers'][indexMarker]['triggers'].map(
-                                                                        (trigger: Trigger, indexTrigger: number) => (
+                                                                        (trigger: TTrigger, indexTrigger: number) => (
                                                                             <tr key={indexTrigger}>
                                                                                 <td>
                                                                                     <Stack gap={1}>

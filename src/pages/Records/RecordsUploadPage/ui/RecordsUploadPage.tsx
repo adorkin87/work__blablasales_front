@@ -6,14 +6,14 @@ import { Box, IconButton, Sheet, Stack, Table, Tooltip } from '@mui/joy';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 
 //components
-import { LeftPanelConversation } from '../../../../widgets/LeftPanel';
-import RightPanel from '../../../../shared/ui/RightPanel';
-import { SelectManagers, SelectScripts } from '../../../../features/Conversations';
-import BtnUploadAudio from '../../../../features/Conversations/BtnUploadAudio/ui/BtnUploadAudio.tsx';
-import PlayAudio from '../../../../features/Conversations/PlayAudio/PlayAudio.tsx';
-import DurationAudio from '../../../../features/Conversations/DurationAudio/DurationAudio.tsx';
+import { LeftPanelRecords } from 'src/widgets/LeftPanel';
+import RightPanel from 'src/shared/ui/RightPanel';
+import { SelectManagers, SelectScripts } from 'src/features/Records';
+import BtnUploadAudio from 'src/features/Records/BtnUploadAudio/ui/BtnUploadAudio.tsx';
+import PlayAudio from 'src/features/Records/PlayAudio/PlayAudio.tsx';
+import DurationAudio from 'src/features/Records/DurationAudio/DurationAudio.tsx';
 
-const ConversationUpload = observer(() => {
+const RecordsUploadPage = observer(() => {
     // state
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     const [selectedManager, setSelectedManager] = useState<number>(0);
@@ -46,9 +46,9 @@ const ConversationUpload = observer(() => {
 
     return (
         <Stack>
-            <LeftPanelConversation />
+            <LeftPanelRecords />
             <RightPanel>
-                <Stack marginBottom={4} alignItems={'end'} gap={8}>
+                <Stack marginBottom={4} justifyContent={'space-between'} alignItems={'end'} gap={8}>
                     <input
                         id={'fileUpload'}
                         type={'file'}
@@ -103,4 +103,4 @@ const ConversationUpload = observer(() => {
     );
 });
 
-export default ConversationUpload;
+export default RecordsUploadPage;

@@ -8,12 +8,17 @@
 //    }
 //}
 //
-//body {
-//    font-family: 'Inter', sans-serif;
-//    font-size: 1.6rem;
-//}
+body {
+    font-family: 'Inter', sans-serif;
+}
 //
 //a,
 //a:visited {
 //    text-decoration: none;
 //}
+
+label {
+    font-weight: 600;
+    font-size: 12px;
+    color: #171a1c;
+}

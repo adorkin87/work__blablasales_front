@@ -12,5 +12,10 @@ export default defineConfig({
         //         enabled: true
         //     }
         // })
-    ]
+    ],
+    resolve: {
+        alias: {
+            src: '/src'
+        }
+    }
 });

@@ -43,6 +43,16 @@ const TopPanel = () => {
                     </Link>
                     <Link
                         component={ReactLink}
+                        to={'/dnd'}
+                        underline={currentSection === 'scripts' ? 'always' : 'hover'}
+                        sx={{
+                            color: currentSection === 'scripts' ? '#65e4a3' : 'white',
+                            textDecorationColor: '#65e4a3'
+                        }}>
+                        dnd
+                    </Link>
+                    <Link
+                        component={ReactLink}
                         to={'/analytics'}
                         underline={currentSection === 'analytics' ? 'always' : 'hover'}
                         sx={{
