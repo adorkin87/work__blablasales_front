@@ -50,7 +50,7 @@ const PlayAudio = ({ file }: PlayAudioProps) => {
     //     }
     // }, []);
 
-    // if (file.type.startsWith('audio/')) {
+    // if (file.types.startsWith('audio/')) {
     //     return (
     //         <div>
     //             <audio ref={audioRef} controls preload={'metadata'} />

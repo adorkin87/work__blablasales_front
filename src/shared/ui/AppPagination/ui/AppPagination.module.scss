@@ -1,0 +1,76 @@
+.pagination {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+}
+
+.navBtn {
+    height: 36px;
+    width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color var(--delay-animation_fast);
+}
+
+.navBtn svg {
+    fill: var(--color-main);
+    transition: fill var(--delay-animation_fast);
+}
+
+.navBtn:disabled {
+    cursor: default;
+}
+
+.navBtn:disabled svg {
+    fill: var(--color-second);
+}
+
+.navBtn:hover:not(:disabled) {
+    background-color: var(--color-main);
+}
+
+.navBtn:hover:not(:disabled) svg {
+    fill: #fff;
+}
+
+.pages {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pages > div {
+    width: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.pageButton {
+    height: 24px;
+    min-width: 24px;
+    padding: 0 4px;
+    color: #fff;
+    border-radius: 4px;
+    border-style: none;
+    cursor: pointer;
+    background-color: var(--color-second);
+}
+
+.pageButton:disabled {
+    cursor: default;
+}
+
+.pageButton:hover:not(:disabled) {
+    background-color: var(--color-main);
+}
+
+.pageButton_active {
+    background-color: var(--color-main);
+}

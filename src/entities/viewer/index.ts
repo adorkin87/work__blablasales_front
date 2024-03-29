@@ -1,3 +1,15 @@
-import ViewerStore from './model/store/viewer.store.ts';
-const viewer = new ViewerStore();
-export default viewer;
+import RootStore from 'src/app/model/root.store.ts';
+
+import AuthStore from './model/auth.store.ts';
+import ConfStore from './model/conf.store.ts';
+
+function createViewerStore(rootStore: RootStore) {
+    return {
+        auth: new AuthStore(rootStore),
+        conf: new ConfStore(rootStore)
+    };
+}
+
+export default createViewerStore;
+
+export type TViewerStore = ReturnType<typeof createViewerStore>;

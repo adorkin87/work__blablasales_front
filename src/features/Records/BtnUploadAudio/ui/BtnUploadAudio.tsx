@@ -1,6 +1,3 @@
-// mui
-import { Button } from '@mui/joy';
-
 // func
 import { uploadAudio } from '../model/func/lib.ts';
 

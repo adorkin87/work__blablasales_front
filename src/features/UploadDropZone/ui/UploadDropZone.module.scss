@@ -1,0 +1,27 @@
+.uploadDropZone {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 14px;
+}
+
+.wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 0.5rem;
+    background-color: rgba(var(--color-main_rgb), 0.25);
+    opacity: 0;
+    animation: show var(--delay-animation) forwards;
+}
+
+@keyframes show {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
