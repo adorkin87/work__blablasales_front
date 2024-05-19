@@ -18,6 +18,9 @@ function createFakeApi() {
 
     const fakeDB = new FakeDBStore();
     fakeDB.endpoints.dict = faker.helpers.multiple(createDictMock, { count });
+    while (!fakeDB.endpoints.dict.find((dict: TDict) => dict.attributes.type === 'marker')) {
+        fakeDB.endpoints.dict = faker.helpers.multiple(createDictMock, { count: 1 });
+    }
 
     return helperCreateFakeAPI<TDict>({ fakeDB, endpoint: 'dict', delay });
 }

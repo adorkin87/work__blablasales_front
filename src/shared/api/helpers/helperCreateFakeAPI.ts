@@ -6,15 +6,16 @@ import addFakeItemCard from '../mocks/addFakeItemCard.ts';
 import updFakeItemCard from '../mocks/updFakeItemCard.ts';
 import delFakeItemCard from '../mocks/delFakeItemCard.ts';
 
-type TConfig = {
+type TConfig<T> = {
     fakeDB: { endpoints: Record<string, any[]> };
     endpoint: string;
     delay?: number | true;
+    includes?: T[];
 };
 
-export default function helperCreateFakeAPI<T>({ fakeDB, endpoint, delay }: TConfig) {
+export default function helperCreateFakeAPI<T, I = undefined>({ fakeDB, endpoint, delay, includes }: TConfig<I>) {
     return {
-        async all(getParams?: TAPIGetParams): Promise<TAPIResponse<T[]>> {
+        async all(getParams?: TAPIGetParams): Promise<TAPIResponse<T[], I>> {
             return getFakeItemsList<T>({
                 fakeDB,
                 endpoint,
@@ -24,19 +25,19 @@ export default function helperCreateFakeAPI<T>({ fakeDB, endpoint, delay }: TCon
             });
         },
 
-        async one(id: string): Promise<TAPIResponse<T>> {
+        async one(id: string): Promise<TAPIResponse<T, I>> {
             return getFakeItemCard<T>({ fakeDB, endpoint, id, delay });
         },
 
-        async add(payload: T): Promise<TAPIResponse<T>> {
+        async add(payload: T): Promise<TAPIResponse<T, I>> {
             return addFakeItemCard<T>({ fakeDB, endpoint, payload, delay });
         },
 
-        async upd(id: string, payload: Record<string, unknown>): Promise<TAPIResponse<T>> {
+        async upd(id: string, payload: Record<string, unknown>): Promise<TAPIResponse<T, I>> {
             return updFakeItemCard<T>({ fakeDB, endpoint, id, payload, delay });
         },
 
-        async del(id: string): Promise<TAPIResponse<T>> {
+        async del(id: string): Promise<TAPIResponse<T, I>> {
             return delFakeItemCard<T>({ fakeDB, endpoint, id, delay });
         }
     };

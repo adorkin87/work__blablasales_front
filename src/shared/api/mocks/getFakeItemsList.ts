@@ -24,7 +24,7 @@ export default async function <T>(options: TOptions): Promise<TResponse<T>> {
     const end = options.perPage ? (options.page ? options.page * options.perPage : options.perPage) : undefined;
 
     return new Promise((resolve) => {
-        console.log(options.fakeDB.endpoints[options.endpoint]);
+        // console.log(options.fakeDB.endpoints[options.endpoint]);
         setTimeout(() => {
             const response = {
                 data: options.fakeDB.endpoints[options.endpoint].slice(start, end),

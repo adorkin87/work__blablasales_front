@@ -15,7 +15,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.26.14",
+    "@floating-ui/react": "^0.26.15",
     "@table-library/react-table-library": "^4.1.7",
     "axios": "^1.6.8",
     "dayjs": "^1.11.11",
@@ -37,8 +37,8 @@
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
     "@fontsource-variable/inter": "^5.0.18",
-    "@iconify/json": "^2.2.210",
-    "@types/lodash": "^4.17.1",
+    "@iconify/json": "^2.2.211",
+    "@types/lodash": "^4.17.4",
     "@types/react": "^18.3.2",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18.3.0",
@@ -51,6 +51,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "msw": "^2.3.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5",
     "unocss": "^0.58.9",

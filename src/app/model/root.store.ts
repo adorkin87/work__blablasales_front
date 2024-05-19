@@ -3,11 +3,10 @@ import type { TApiInstance } from '../api/createApi.ts';
 import type { TViewerStore } from '../../entities/viewer';
 
 //stores
-import createViewerStore from '../../entities/viewer';
+import createViewerStore from 'src/entities/viewer';
 import { RecordsListStore } from 'src/entities/record';
 import { AgentCardStore, AgentsListStore } from 'src/entities/agent';
-import { ScriptsListStore } from 'src/entities/script';
-import { DictsListStore } from 'src/entities/dict';
+import { DictsListStore, ScriptsListStore } from 'src/entities/script';
 
 class RootStore {
     api: TApiInstance;

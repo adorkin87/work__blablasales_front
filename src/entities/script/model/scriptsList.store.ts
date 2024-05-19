@@ -1,4 +1,4 @@
-import { makeObservable, observable, runInAction } from 'mobx';
+import { action, autorun, makeObservable, observable, runInAction } from 'mobx';
 
 import type { TAPIGetParams, TAPIResponseMeta } from 'src/shared/api';
 import type RootStore from 'src/app/model/root.store.ts';
@@ -9,7 +9,7 @@ class ScriptsListStore {
     rootStore: RootStore;
 
     data: TScript[] = [];
-    meta?: TAPIResponseMeta = null;
+    meta: TAPIResponseMeta | null = null;
 
     state: TStoreState = 'init';
 
@@ -17,10 +17,13 @@ class ScriptsListStore {
         makeObservable(this, {
             data: observable,
             meta: observable,
-            state: observable
+            state: observable,
+            get: action
         });
 
         this.rootStore = rootStore;
+
+        autorun(async () => this.get());
     }
 
     async get(getParams?: TAPIGetParams) {

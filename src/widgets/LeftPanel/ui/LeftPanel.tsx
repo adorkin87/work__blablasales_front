@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import classNames from 'classnames';
 
 //styles
 import cls from './LeftPanel.module.scss';
@@ -44,15 +43,15 @@ const LeftPanel = () => {
                         <p className={'sb_text'}>Записи</p>
                     </Link>
                     <div className={'mb-2 mx-6 b-1 b-style-solid b-color-color-second/50'} />
-                    <Link className={'sb_link mb group'} to={'/metrics'}>
+                    <Link className={'sb_link mb group'} to={'/setup'}>
                         <div className={'i-ri-dashboard-fill sb_icon'} />
                         <p className={'sb_text'}>Компании</p>
                     </Link>
-                    <Link className={'sb_link mb group'} to={'/metrics/scripts'}>
+                    <Link className={'sb_link mb group'} to={'/setup/scripts'}>
                         <div className={'i-ri-file-list-fill sb_icon'} />
                         <p className={'sb_text'}>Сценарии</p>
                     </Link>
-                    <Link className={'sb_link group'} to={'/metrics/markers'}>
+                    <Link className={'sb_link group'} to={'/setup/dicts'}>
                         <div className={'i-ri-book-marked-fill sb_icon'} />
                         <p className={'sb_text'}>Маркеры</p>
                     </Link>

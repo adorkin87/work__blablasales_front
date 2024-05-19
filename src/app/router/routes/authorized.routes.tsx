@@ -2,8 +2,10 @@ import RecordsListPage from 'src/pages/RecordsListPage';
 import RecordsUploadPage from 'src/pages/RecordsUploadPage';
 
 import AgentsListPage from 'src/pages/AgentsListPage';
-import ScriptsListPage from 'src/pages/ScriptsListPage';
+
 import DictsListPage from 'src/pages/DictsListPage';
+import ScriptsListPage from 'src/pages/ScriptsListPage';
+import ScriptCardPage from 'src/pages/ScriptCardPage';
 
 const authorizedRoutes = [
     {
@@ -15,7 +17,7 @@ const authorizedRoutes = [
         element: <RecordsUploadPage />
     },
     {
-        path: '/metrics',
+        path: '/setup',
         children: [
             {
                 index: true,
@@ -23,10 +25,14 @@ const authorizedRoutes = [
             },
             {
                 path: 'scripts',
-                element: <ScriptsListPage />
+                children: [
+                    { index: true, element: <ScriptsListPage /> },
+                    { path: 'add', element: <ScriptCardPage /> },
+                    { path: ':id', element: <ScriptCardPage /> }
+                ]
             },
             {
-                path: 'markers',
+                path: 'dicts',
                 element: <DictsListPage />
             }
         ]

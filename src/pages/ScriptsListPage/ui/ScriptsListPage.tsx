@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 //components
 import AppLoadingOverlay from 'src/shared/ui/AppLoadingOverlay';
-import ScriptsList from 'src/entities/script/ui/ScriptsList.tsx';
+import ScriptsList from 'src/entities/script/ui/ScriptList.tsx';
 
 // stores
 import RootStoreContext from 'src/app/providers/rootStore.context.ts';

@@ -17,8 +17,8 @@ export type TRecord = {
     //     agent: {
     //         data: { type: 'agent'; id: string };
     //     };
-    //     script: {
-    //         data: { type: 'script'; id: string };
+    //     script_old: {
+    //         data: { type: 'script_old'; id: string };
     //     };
     // };
 };

@@ -4,11 +4,11 @@ import { observer } from 'mobx-react-lite';
 //components
 import AppLoadingOverlay from 'src/shared/ui/AppLoadingOverlay';
 import AppDock from 'src/shared/ui/AppDock';
-import { DictsList, DictCard } from 'src/entities/dict';
+import { DictsList, DictCard } from '../../../entities/script';
 
 //stores
 import RootStoreContext from 'src/app/providers/rootStore.context.ts';
-import DictCardStore from 'src/entities/dict/model/dictCard.store.ts';
+import DictCardStore from 'src/entities/script/model/dictCard.store.ts';
 
 const DictsListPage = observer(() => {
     //ref
