@@ -1,5 +1,11 @@
+import ScriptCard from 'src/entities/script/ui/ScriptCard.tsx';
+
 const ScriptCardPage = () => {
-    return <div>test</div>;
+    return (
+        <div>
+            <ScriptCard />
+        </div>
+    );
 };
 
 export default ScriptCardPage;

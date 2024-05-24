@@ -1,16 +1,15 @@
+//type
+export type { TAPIGetParams, TAPIResponseMeta } from './types/types.ts';
+
+//plugin
 import httpPlugin from './plugins/httpPlugin.ts';
 export { httpPlugin };
 
+//helpers
 import helperCreateAPI from './helpers/helperCreateAPI.ts';
-import helperCreateFakeAPI from './helpers/helperCreateFakeAPI.ts';
-export { helperCreateAPI, helperCreateFakeAPI };
+import helperCreateHandlersMockApi from './helpers/helperCreateHandlersMockApi.ts';
+export { helperCreateAPI, helperCreateHandlersMockApi };
 
-import getFakeItemsList from './mocks/getFakeItemsList.ts';
-import getFakeItemCard from './mocks/getFakeItemCard.ts';
-import addFakeItemCard from './mocks/addFakeItemCard.ts';
-import updFakeItemCard from './mocks/updFakeItemCard.ts';
-import delFakeItemCard from './mocks/delFakeItemCard.ts';
-import FakeDBStore from './mocks/fakeDB.store.ts';
-export { getFakeItemsList, getFakeItemCard, addFakeItemCard, updFakeItemCard, delFakeItemCard, FakeDBStore };
-
-export type { TAPIGetParams, TAPIResponseMeta } from './types/types.ts';
+//func
+import convertGetParams from './lib/convertGetParams.ts';
+export { convertGetParams };

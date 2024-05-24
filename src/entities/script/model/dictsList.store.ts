@@ -32,7 +32,7 @@ class DictsListStore {
         if (this.state === 'pending') return;
         this.state = 'pending';
 
-        const res = await this.rootStore.api.dict.all(getParams);
+        const res = await this.rootStore.api.dict.list(getParams);
 
         runInAction(() => {
             this.data = res.data;

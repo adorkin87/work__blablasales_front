@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import type { TAgent } from '../types/types.ts';
 import type AgentCardStore from '../model/agentCard.store.ts';
 import AppFlippedInput from 'src/shared/ui/AppFlippedInput';
+// import { TextArea } from '@radix-ui/themes';
 
 interface IAgentCard {
     agentStore: AgentCardStore;
@@ -56,17 +57,17 @@ const AgentCard: FC<IAgentCard> = observer(({ agentStore }) => {
                         type={'phone'}
                     />
                 </div>
-                <div className={'flex flex-col gap-1'}>
-                    <div className={'flex items-center gap-1'}>
-                        <div className={'i-ri-file-text-line c-color-second'} />
-                        <p className={'c-color-main fw-500 text-sm'}>Комментарий:</p>
-                    </div>
-                    <AppFlippedInput
-                        value={agentStore.data?.attributes.comment ?? ''}
-                        setValue={(e) => handleInputChange('comment', e)}
-                        placeholder={'добавить комментарий ...'}
-                    />
-                </div>
+                {/*<div className={'flex flex-col gap-1'}>*/}
+                {/*    <div className={'flex items-center gap-1'}>*/}
+                {/*        <div className={'i-ri-file-text-line c-color-second'} />*/}
+                {/*        <p className={'c-color-main fw-500 text-sm'}>Комментарий:</p>*/}
+                {/*    </div>*/}
+                {/*    <AppFlippedInput*/}
+                {/*        value={agentStore.data?.attributes.comment ?? ''}*/}
+                {/*        setValue={(e) => handleInputChange('comment', e)}*/}
+                {/*        placeholder={'добавить комментарий ...'}*/}
+                {/*    />*/}
+                {/*</div>*/}
             </div>
         </div>
     );

@@ -8,7 +8,7 @@ import { DictsList, DictCard } from '../../../entities/script';
 
 //stores
 import RootStoreContext from 'src/app/providers/rootStore.context.ts';
-import DictCardStore from 'src/entities/script/model/dictCard.store.ts';
+import { DictCardStore } from 'src/entities/script';
 
 const DictsListPage = observer(() => {
     //ref
@@ -41,7 +41,7 @@ const DictsListPage = observer(() => {
     }, [dictStore.changed, dictStore.data?.attributes.name]);
 
     //**************************************************************************************************
-    //handlers
+    //agentHandlers
 
     const handleBtnAdd = () => {
         dictStore.createNewDict();

@@ -22,10 +22,10 @@ export type TAPIResponseMeta = {
 // };
 
 //2variant
-export type TAPIResponse<T, I> = {
+export type TAPIResponse<T, I = undefined> = {
     data: T;
     meta?: TAPIResponseMeta;
-    includes?: I[];
+    included?: I[];
 };
 
 //3 variant

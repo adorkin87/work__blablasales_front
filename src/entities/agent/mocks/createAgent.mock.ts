@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker/locale/ru';
 
 import type { TAgent } from '../types/types.ts';
 
-export function createAgentMock(): TAgent {
+const createAgentMock = (): TAgent => {
     const sex = faker.person.sexType();
     const firstName = faker.person.firstName(sex);
     const lastName = faker.person.lastName(sex);
@@ -21,4 +21,6 @@ export function createAgentMock(): TAgent {
             comment: faker.helpers.maybe(() => faker.lorem.sentence({ min: 2, max: 10 }))
         }
     };
-}
+};
+
+export default createAgentMock;

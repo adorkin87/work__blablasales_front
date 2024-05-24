@@ -6,21 +6,17 @@ export type TRecord = {
         file_name: string;
         file_length: number;
         status: number;
-        agent_id: number;
-        agent_name: string;
-        script_id: number;
-        script_name: string;
-        kpiQuality: number;
-        kpiPercent: number;
+        kpiQuality?: number;
+        kpiPercent?: number;
     };
-    // relationships: {
-    //     agent: {
-    //         data: { type: 'agent'; id: string };
-    //     };
-    //     script_old: {
-    //         data: { type: 'script_old'; id: string };
-    //     };
-    // };
+    relationships: {
+        agent: {
+            data: { type: 'agent'; id: string };
+        };
+        script: {
+            data: { type: 'script'; id: string };
+        };
+    };
 };
 
 export type TUploadRecord = {

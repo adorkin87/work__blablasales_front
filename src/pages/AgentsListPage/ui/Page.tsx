@@ -1,7 +1,5 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useContext, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-
-import type { TAgent } from 'src/entities/agent';
 
 //src components
 import AppLoadingOverlay from 'src/shared/ui/AppLoadingOverlay';
@@ -43,13 +41,7 @@ const Page = observer(() => {
     }, [agentStore.changed, agentStore.data?.attributes.name]);
 
     //**************************************************************************************************
-    //handlers
-
-    const handleRowClick = (item: Required<TAgent>) => {
-        agentStore.createNewAgent();
-        void agentStore.get(item.id);
-        setShowAgentCard(true);
-    };
+    //agentHandlers
 
     const handleBtnAdd = () => {
         agentStore.createNewAgent();
@@ -59,7 +51,20 @@ const Page = observer(() => {
     const handleBtnSave = async () => {
         agentStore.data?.id ? await agentStore.upd(agentStore.data.id) : await agentStore.add();
         setShowAgentCard(false);
-        void rootStore.agentsList.get();
+        void rootStore.agentsList.getList();
+    };
+
+    const handleMenuEdit = (e: MouseEvent, itemID: string) => {
+        e.stopPropagation();
+        agentStore.createNewAgent();
+        void agentStore.get(itemID);
+        setShowAgentCard(true);
+    };
+
+    const handleMenuDel = async (e: MouseEvent, itemID: string) => {
+        e.stopPropagation();
+        await rootStore.agentsList.del(itemID);
+        await rootStore.agentsList.getList();
     };
 
     //**************************************************************************************************
@@ -78,11 +83,14 @@ const Page = observer(() => {
                     </button>
                 </div>
                 <AppLoadingOverlay ref={tableWrapperRef} active={rootStore?.agentsList.state === 'pending'}>
-                    <AgentsList data={rootStore?.agentsList.data} rowProps={{ onClick: handleRowClick }} />
+                    <AgentsList
+                        data={rootStore?.agentsList.data}
+                        handleMenuEdit={handleMenuEdit}
+                        handleMenuDel={handleMenuDel}
+                    />
                 </AppLoadingOverlay>
             </div>
             <AppDock
-                // title={'Профиль менеджера'}
                 onShow={showAgentCard}
                 setOnShow={setShowAgentCard}
                 handleBtnSave={handleBtnSave}

@@ -30,7 +30,7 @@ const DictsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel 
     const [ids, setIds] = useState<string[]>([]);
 
     //**************************************************************************************************
-    //handlers
+    //agentHandlers
 
     const handleExpand = (item: TDict) => {
         if (ids.includes(item.id!)) {
@@ -48,12 +48,7 @@ const DictsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel 
             label: 'Название',
             renderCell: (item) => (
                 <div className={'flex items-center gap-2'}>
-                    <div
-                        className={classNames(
-                            'flex-shrink-0 i-ri-arrow-right-s-line hover:c-color-main z-0 transition-100',
-                            ids.includes(item.id) ? 'transform-rotate-90 c-color-main' : ' c-color-second'
-                        )}
-                    />
+                    <div className={classNames('expand-arrow', { 'expand-arrow_down': ids.includes(item.id) })} />
                     {item.attributes.name}
                 </div>
             ),
@@ -61,14 +56,10 @@ const DictsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel 
         },
         {
             label: 'Тип',
-            renderCell: (item) => Types[item.attributes.type],
-            resize: true
-        },
-        {
-            label: 'Комментарий',
+            // renderCell: (item) => Types[item.attributes.type],
             renderCell: (item) => (
                 <div className={'flex items-center justify-between gap-2'}>
-                    <div className={'ellipsis'}>{item.attributes.comment}</div>
+                    <div className={'ellipsis'}>{Types[item.attributes.type]}</div>
                     <AppPopUpMenu>
                         <AppPopUpBtnExpand onExpand={ids.includes(item.id)} onClick={() => handleExpand(item)} />
                         <AppPopUpDivider />
@@ -77,7 +68,22 @@ const DictsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel 
                     </AppPopUpMenu>
                 </div>
             )
+            // resize: true
         }
+        // {
+        //     label: 'Комментарий',
+        //     renderCell: (item) => (
+        //         <div className={'flex items-center justify-between gap-2'}>
+        //             <div className={'ellipsis'}>{item.attributes.comment}</div>
+        //             <AppPopUpMenu>
+        //                 <AppPopUpBtnExpand onExpand={ids.includes(item.id)} onClick={() => handleExpand(item)} />
+        //                 <AppPopUpDivider />
+        //                 <AppPopUpBtnEdit onClick={(e) => handleMenuEdit(e, item.id)} />
+        //                 <AppPopUpBtnDel onClick={(e) => handleMenuDel(e, item.id)} />
+        //             </AppPopUpMenu>
+        //         </div>
+        //     )
+        // }
     ];
 
     const ROW_OPTIONS = {

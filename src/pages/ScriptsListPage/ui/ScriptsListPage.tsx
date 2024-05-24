@@ -1,5 +1,4 @@
-import { useCallback, useContext, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { MouseEvent, useContext, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 //components
@@ -8,29 +7,23 @@ import ScriptsList from 'src/entities/script/ui/ScriptList.tsx';
 
 // stores
 import RootStoreContext from 'src/app/providers/rootStore.context.ts';
+import { ScriptCard, ScriptCardStore } from 'src/entities/script';
+import AppDock from 'src/shared/ui/AppDock';
 
 const ScriptsListPage = observer(() => {
-    //react hooks
-    const navigate = useNavigate();
-
     //ref
     const tableWrapperRef = useRef<HTMLDivElement>(null);
 
     //stores
-    const rootStore = useContext(RootStoreContext);
+    const rootStore = useContext(RootStoreContext)!;
+    const [scriptStore] = useState(() => new ScriptCardStore(rootStore));
 
-    const tableRef = useCallback((node: any) => {
-        if (node) {
-            node.style.height = node.offsetParent.offsetHeight - 32 - node.offsetTop + 'px';
-        }
-    }, []);
+    //states
+    const [showScriptCard, setShowScriptCard] = useState<boolean>(false);
+    const [disabledBtnSave, setDisabledBtnSave] = useState<boolean>(true);
 
     //**************************************************************************************************
     //effects
-
-    useEffect(() => {
-        rootStore?.scriptsList.get();
-    }, []);
 
     useEffect(() => {
         if (tableWrapperRef.current === null) return;
@@ -38,54 +31,74 @@ const ScriptsListPage = observer(() => {
         tableWrapper.style.height = window.innerHeight - 16 - tableWrapper.offsetTop - 16 + 'px';
     }, []);
 
+    useEffect(() => {
+        if (!scriptStore.data) return;
+        if (!scriptStore.data.attributes.name) {
+            setDisabledBtnSave(true);
+            return;
+        }
+        setDisabledBtnSave(!scriptStore.changed);
+    }, [scriptStore.changed, scriptStore.data?.attributes.name]);
+
     //**************************************************************************************************
-    //handlers
+    //agentHandlers
 
-    // const handleBtnAdd = (): void => {
-    //     navigate('/scripts/add');
-    // };
-    //
-    // const handleBtnEdit = (scriptID: number): void => {
-    //     navigate('/scripts/' + String(scriptID));
-    // };
+    const handleBtnAdd = (): void => {
+        scriptStore.createNewScript();
+        setShowScriptCard(true);
+    };
 
-    // const handleBtnCopy = async (indexRow: number): Promise<void> => {
-    //     const scriptText = scriptListStore.value[indexRow]['script_text'];
-    //     scriptCardStore.updStoreValue('script_name', `${scriptListStore.value[indexRow]['script_name']} (копия)`);
-    //     scriptCardStore.updStoreValue('script_comment', scriptListStore.value[indexRow]['script_comment']);
-    //     scriptCardStore.updStoreValue('script_text', scriptText);
-    //     await scriptCardStore.addItem();
-    //     scriptListStore.getList();
-    // };
+    const handleBtnSave = async () => {
+        scriptStore.data?.id ? await scriptStore.upd(scriptStore.data.id) : await scriptStore.add();
+        setShowScriptCard(false);
+        void rootStore.scriptsList.getList();
+    };
 
-    // const handleBtnDel = (itemID: string, itemName: string): void => {
-    //     setModalSelectedItem({ itemID, itemName });
-    //     setModalOpen(true);
-    // };
-    //
-    // const handleDelItem = async (): Promise<void> => {
-    //     if (modalSelectedItem.itemID) {
-    //         await scriptListStore.delItem(modalSelectedItem.itemID);
-    //     }
-    //     scriptListStore.resetValue();
-    //     scriptListStore.getList();
-    // };
+    const handleMenuEdit = (e: MouseEvent, itemID: string) => {
+        e.stopPropagation();
+        scriptStore.createNewScript();
+        void scriptStore.get(itemID);
+        setShowScriptCard(true);
+    };
+
+    const handleMenuDel = async (e: MouseEvent, itemID: string) => {
+        e.stopPropagation();
+        await rootStore?.scriptsList.del(itemID);
+        await rootStore?.scriptsList.getList();
+    };
 
     //**************************************************************************************************
     //render
 
     return (
-        <div className={'h-full p-4'}>
-            <div className={'top-panel'}>
-                <p className={'title'}>Список скриптов</p>
-                <button className={'btn active:bg-color-main'} disabled={rootStore?.dictsList.state === 'pending'}>
-                    Добавить
-                </button>
+        <>
+            <div className={'h-full p-4'}>
+                <div className={'top-panel'}>
+                    <p className={'title'}>Список скриптов</p>
+                    <button
+                        className={'btn active:bg-color-main'}
+                        disabled={rootStore?.dictsList.state === 'pending'}
+                        onClick={handleBtnAdd}>
+                        Добавить
+                    </button>
+                </div>
+                <AppLoadingOverlay ref={tableWrapperRef} active={rootStore?.scriptsList.state === 'pending'}>
+                    <ScriptsList
+                        data={rootStore?.scriptsList.data}
+                        included={rootStore?.scriptsList.included}
+                        handleMenuEdit={handleMenuEdit}
+                        handleMenuDel={handleMenuDel}
+                    />
+                </AppLoadingOverlay>
             </div>
-            <AppLoadingOverlay ref={tableWrapperRef} active={rootStore?.scriptsList.state === 'pending'}>
-                <ScriptsList data={rootStore?.scriptsList.data} />
-            </AppLoadingOverlay>
-        </div>
+            <AppDock
+                onShow={showScriptCard}
+                setOnShow={setShowScriptCard}
+                handleBtnSave={handleBtnSave}
+                stateBtnSave={disabledBtnSave}>
+                <ScriptCard scriptStore={scriptStore} />
+            </AppDock>
+        </>
     );
 });
 

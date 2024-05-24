@@ -1,16 +1,15 @@
-import type { AxiosInstance } from 'axios';
+//type
+export type { TRecord } from './types/types.ts';
 
+//api
+import createRecordApi from './api/api.ts';
+export { createRecordApi };
+
+//mocks
+import createRecordMock from './mocks/createRecord.mock.ts';
+import createRecordHandlers from './mocks/createRecordHandlers.ts';
+export { createRecordMock, createRecordHandlers };
+
+//store
 import RecordsListStore from './model/recordsList.store.ts';
-
-import createApi from './api/api.ts';
-import createFakeApi from './api/fakeApi.ts';
-
-const createRecordApi = (httpPlugin: AxiosInstance) => {
-    if (import.meta.env.DEV && Boolean(+import.meta.env.VITE_FAKEAPI_RECORD)) return createFakeApi();
-    return createApi(httpPlugin);
-};
-
-export { createRecordApi, RecordsListStore };
-
-import type { TRecord } from './types/types.ts';
-export type { TRecord };
+export { RecordsListStore };

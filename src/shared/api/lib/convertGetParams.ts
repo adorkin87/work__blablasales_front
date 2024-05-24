@@ -1,7 +1,7 @@
 import { TAPIGetParams } from '../types/types.ts';
 
 export default function convertGetParams(getParams?: TAPIGetParams): string | undefined {
-    if (!getParams) return;
+    if (!getParams) return '';
 
     const result: { [key: string]: string } = {};
 
@@ -10,5 +10,5 @@ export default function convertGetParams(getParams?: TAPIGetParams): string | un
         result[key] = String(getParams[key]);
     }
 
-    return '&' + new URLSearchParams(result).toString();
+    return '?' + new URLSearchParams(result).toString();
 }

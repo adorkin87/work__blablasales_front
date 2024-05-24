@@ -36,7 +36,7 @@ const AppFlippedInput: FC<IAppFlippedInput> = ({
     const [onEdit, setOnEdit] = useState<boolean>(false);
 
     useEffect(() => {
-        onEdit && inputRef.current && inputRef.current.focus();
+        // onEdit && inputRef.current && inputRef.current.focus();
     }, [onEdit]);
 
     const handleOnKeyDown = (e: KeyboardEvent) => {

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 //styles
 import cls from './LeftPanel.module.scss';
@@ -16,10 +16,10 @@ const initFullWidth: boolean =
 
 const LeftPanel = () => {
     const rootStore = useContext(RootStoreContext);
-    const location = useLocation();
+    // const location = useLocation();
     const [fullWidth, setFullWidth] = useState<boolean | null>(initFullWidth);
 
-    const currentSection: string = location.pathname.split('/')[1];
+    // const currentSection: string = location.pathname.split('/')[1];
 
     const handleBtnResize = (): void => {
         localStorage.setItem('leftPanelFullWidth', String(!fullWidth));

@@ -37,7 +37,7 @@ const DictCard: FC<IDictCard> = observer(({ dictStore, onShow }) => {
     const selectValue: TDict['attributes']['type'] = dictStore.data.attributes.type ?? 'marker';
 
     //**************************************************************************************************
-    //handlers
+    //agentHandlers
 
     const handleInputChange = (
         fieldName: keyof TDict['attributes'],
@@ -80,17 +80,17 @@ const DictCard: FC<IDictCard> = observer(({ dictStore, onShow }) => {
                 }}
             />
 
-            <div className={'flex flex-col gap-1'}>
-                <div className={'flex items-center gap-1'}>
-                    <div className={'i-ri-file-text-line c-color-second'} />
-                    <p className={'c-color-main fw-500 text-sm'}>Комментарий:</p>
-                </div>
-                <AppFlippedInput
-                    value={dictStore.data?.attributes.comment ?? ''}
-                    setValue={(e) => handleInputChange('comment', e)}
-                    placeholder={'добавить комментарий ...'}
-                />
-            </div>
+            {/*<div className={'flex flex-col gap-1'}>*/}
+            {/*    <div className={'flex items-center gap-1'}>*/}
+            {/*        <div className={'i-ri-file-text-line c-color-second'} />*/}
+            {/*        <p className={'c-color-main fw-500 text-sm'}>Комментарий:</p>*/}
+            {/*    </div>*/}
+            {/*    <AppFlippedInput*/}
+            {/*        value={dictStore.data?.attributes.comment ?? ''}*/}
+            {/*        setValue={(e) => handleInputChange('comment', e)}*/}
+            {/*        placeholder={'добавить комментарий ...'}*/}
+            {/*    />*/}
+            {/*</div>*/}
 
             <div className={'flex flex-col gap-1'}>
                 <div className={'flex items-center gap-1'}>

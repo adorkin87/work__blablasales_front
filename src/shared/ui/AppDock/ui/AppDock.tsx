@@ -11,11 +11,11 @@ interface IAppDock {
 }
 
 const AppDock: FC<IAppDock> = ({ title, onShow, setOnShow, children, handleBtnSave, stateBtnSave }) => {
-    const [sizeDock, setSizeDock] = useState<number>(400);
+    const [sizeDock, setSizeDock] = useState<number>(500);
 
     const handleResizeDock = (size: number) => {
-        if (size < 400) {
-            setSizeDock(400);
+        if (size < 500) {
+            setSizeDock(500);
             return;
         }
         if (size > window.innerWidth) {
@@ -34,7 +34,7 @@ const AppDock: FC<IAppDock> = ({ title, onShow, setOnShow, children, handleBtnSa
             size={sizeDock}
             onSizeChange={handleResizeDock}
             dockStyle={{
-                minWidth: '400px',
+                minWidth: '500px',
                 maxWidth: '100wh',
                 padding: '2rem 1rem',
                 backgroundColor: '#efefef'
@@ -48,12 +48,16 @@ const AppDock: FC<IAppDock> = ({ title, onShow, setOnShow, children, handleBtnSa
                     )}
                     {children}
                 </div>
-                <div className={'flex justify-end gap-4'}>
-                    <button className={'btn'} onClick={() => setOnShow(false)}>
-                        Закрыть
-                    </button>
+                <div className={'pl-4 flex gap-4'}>
                     <button className={'btn'} disabled={stateBtnSave} onClick={handleBtnSave}>
                         Сохранить
+                    </button>
+                    <button
+                        className={
+                            'px-2 fw-600 text-sm c-color-second b-style-none cursor-pointer hover:c-color-main transition-100'
+                        }
+                        onClick={() => setOnShow(false)}>
+                        Отменить
                     </button>
                 </div>
             </div>

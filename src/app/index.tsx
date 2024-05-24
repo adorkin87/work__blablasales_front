@@ -1,13 +1,19 @@
 import { BrowserRouter } from 'react-router-dom';
 
 import { Slide, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
+import 'virtual:uno.css';
+// import '@radix-ui/themes/styles.css';
+import 'react-toastify/dist/ReactToastify.css';
 import '@fontsource-variable/inter';
+
 import 'src/shared/styles/reset.scss';
 import 'src/shared/styles/var.scss';
 import 'src/shared/styles/base.scss';
 import 'src/shared/styles/fonts.scss';
+
+import { worker } from './mocks/browser.ts';
+export { worker };
 
 import createHttpPlugin from 'src/shared/api/plugins/httpPlugin.ts';
 import createApi from './api/createApi.ts';

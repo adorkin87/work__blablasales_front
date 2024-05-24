@@ -10,7 +10,7 @@ import AppPagination from 'src/shared/ui/AppPagination';
 import AppLoadingOverlay from 'src/shared/ui/AppLoadingOverlay';
 
 //local components
-import TableRecordsList from './TableRecordsList.tsx';
+import RecordList from '../../../entities/record/ui/RecordList.tsx';
 
 //stores
 import rootStoreContext from 'src/app/providers/rootStore.context.ts';
@@ -42,7 +42,7 @@ const RecordsListPage = observer(() => {
     //effects
 
     useEffect(() => {
-        rootStore?.recordsList.get({ page: navCurrent, perPage: rootStore.viewer.conf.cntRowTable.value });
+        rootStore?.recordsList.getList({ page: navCurrent, perPage: rootStore.viewer.conf.cntRowTable.value });
     }, [navCurrent]);
 
     useEffect(() => {
@@ -71,7 +71,7 @@ const RecordsListPage = observer(() => {
     }, [files]);
 
     // *************************************************************************************************
-    //handlers
+    //agentHandlers
 
     const handleBtnAdd = (): void => {
         navigate('/records/upload');
@@ -79,7 +79,7 @@ const RecordsListPage = observer(() => {
 
     const refreshData = () => {
         setNavCurrent(1);
-        rootStore?.recordsList.get({ page: 1, perPage: rootStore.viewer.conf.cntRowTable.value });
+        rootStore?.recordsList.getList({ page: 1, perPage: rootStore.viewer.conf.cntRowTable.value });
     };
 
     // *************************************************************************************************
@@ -115,7 +115,7 @@ const RecordsListPage = observer(() => {
             </div>
 
             <AppLoadingOverlay ref={tableWrapperRef} active={rootStore?.recordsList.state === 'pending'}>
-                <TableRecordsList data={rootStore?.recordsList.data} />
+                <RecordList data={rootStore?.recordsList.data} included={rootStore?.recordsList.included!} />
             </AppLoadingOverlay>
 
             {showPagination && (

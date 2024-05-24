@@ -7,7 +7,7 @@ import type { TDict } from '../types/types.ts';
 
 import { cloneDeep, isEqual } from 'lodash';
 
-class AgentCardStore {
+class DictCardStore {
     rootStore: RootStore;
 
     data: TDict | null = null;
@@ -158,4 +158,4 @@ class AgentCardStore {
     }
 }
 
-export default AgentCardStore;
+export default DictCardStore;

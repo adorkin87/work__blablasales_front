@@ -6,7 +6,7 @@ export type TDict = {
         type: 'kev' | 'marker' | 'objection';
         triggers: string[];
         comment?: string;
-        // used?: string[];
+        used?: number;
     };
 };
 

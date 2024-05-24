@@ -6,18 +6,15 @@ import type { TAgent } from '../types/types.ts';
 
 //components
 import AppTable from 'src/shared/ui/AppTable';
+import AppPopUpMenu, { AppPopUpBtnDel, AppPopUpBtnEdit } from 'src/shared/ui/AppPopUpMenu';
 
 interface ITableRecordsList {
     data?: TAgent[] | null;
-    rowProps?: { onClick: (item: Required<TAgent>) => void };
+    handleMenuEdit: (e: MouseEvent, itemID: string) => void;
+    handleMenuDel: (e: MouseEvent, itemID: string) => Promise<void>;
 }
 
-const handleBtnMore = (e: MouseEvent, itemID: string) => {
-    e.stopPropagation();
-    console.log(itemID);
-};
-
-const AgentsList: FC<ITableRecordsList> = ({ data, rowProps }) => {
+const AgentsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel }) => {
     const columns: Column<Required<TAgent>>[] = [
         {
             label: 'Имя',
@@ -31,25 +28,34 @@ const AgentsList: FC<ITableRecordsList> = ({ data, rowProps }) => {
         },
         {
             label: 'Телефон',
-            renderCell: (item) => item.attributes.phone,
-            resize: true
-        },
-        {
-            label: 'Комментарий',
+            // renderCell: (item) => item.attributes.phone,
             renderCell: (item) => (
                 <div className={'flex items-center justify-between gap-2'}>
-                    <div className={'ellipsis'}>{item.attributes.comment}</div>
-                    <div
-                        className={'h-6 px-1 flex items-center justify-center group'}
-                        onClick={(e) => handleBtnMore(e, item.id)}>
-                        <div className={'i-ri-more-2-fill c-color-second/75 group-hover:c-#212227'} />
-                    </div>
+                    <div className={'ellipsis'}>{item.attributes.phone}</div>
+                    <AppPopUpMenu>
+                        <AppPopUpBtnEdit onClick={(e) => handleMenuEdit(e, item.id)} />
+                        <AppPopUpBtnDel onClick={(e) => handleMenuDel(e, item.id)} />
+                    </AppPopUpMenu>
                 </div>
             )
+            // resize: true
         }
+        // {
+        //     label: 'Комментарий',
+        //     renderCell: (item) => (
+        //         <div className={'flex items-center justify-between gap-2'}>
+        //             <div className={'ellipsis'}>{item.attributes.comment}</div>
+        //             <div
+        //                 className={'h-6 px-1 flex items-center justify-center group'}
+        //                 onClick={(e) => handleBtnMore(e, item.id)}>
+        //                 <div className={'i-ri-more-2-fill c-color-second/75 group-hover:c-#212227'} />
+        //             </div>
+        //         </div>
+        //     )
+        // }
     ];
 
-    return <AppTable name={'AgentsList'} data={{ nodes: data ?? [] }} columns={columns} rowProps={rowProps} />;
+    return <AppTable name={'AgentsList'} data={{ nodes: data ?? [] }} columns={columns} />;
 };
 
 export default AgentsList;

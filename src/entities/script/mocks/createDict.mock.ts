@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker/locale/ru';
 
 import type { TDict } from '../types/types.ts';
 
-export function createDictMock(): TDict {
+const createDictMock = (): TDict => {
     return {
         id: String(faker.number.int()),
         type: 'dict',
@@ -13,4 +13,6 @@ export function createDictMock(): TDict {
             comment: faker.helpers.maybe(() => faker.lorem.sentence({ min: 2, max: 10 }), { probability: 0.3 })
         }
     };
-}
+};
+
+export default createDictMock;

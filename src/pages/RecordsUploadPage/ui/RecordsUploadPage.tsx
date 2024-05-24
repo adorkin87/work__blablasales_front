@@ -34,7 +34,7 @@ const RecordsUploadPage = () => {
     }, []);
 
     // *************************************************************************************************
-    //handlers
+    //agentHandlers
 
     const handleUploadFiles = (newFiles: File[]) => {
         const uploaded = files ? [...files] : [];

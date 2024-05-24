@@ -1,21 +1,24 @@
 import { FC } from 'react';
 
 //types
-import { Column } from '@table-library/react-table-library/compact';
-import { TRecord } from 'src/entities/record/types/types.ts';
+import type { Column } from '@table-library/react-table-library/compact';
+import type { TAgent } from 'src/entities/agent';
+import type { TScript } from 'src/entities/script';
+import type { TRecord } from '../types/types.ts';
 
 //components
 import AppTable from 'src/shared/ui/AppTable';
 
-interface ITableRecordsList {
+interface IProps {
     data?: TRecord[] | null;
+    included: (TAgent | TScript)[];
 }
 
-const TableRecordsList: FC<ITableRecordsList> = ({ data }) => {
+const RecordList: FC<IProps> = ({ data, included }) => {
     const columns: Column<Required<TRecord>>[] = [
         {
             label: 'Дата',
-            renderCell: (item) => item.attributes.upload_date.toLocaleDateString(),
+            renderCell: (item) => new Date(item.attributes.upload_date).toLocaleDateString(),
             resize: true
         },
         {
@@ -35,12 +38,20 @@ const TableRecordsList: FC<ITableRecordsList> = ({ data }) => {
         },
         {
             label: 'Менеджер',
-            renderCell: (item) => item.attributes.agent_name,
+            renderCell: (item) =>
+                included.find(
+                    (includedItem) =>
+                        includedItem.type === 'agent' && includedItem.id === item.relationships.agent.data.id
+                )?.attributes.name,
             resize: true
         },
         {
             label: 'Скрипт',
-            renderCell: (item) => item.attributes.script_name,
+            renderCell: (item) =>
+                included.find(
+                    (includedItem) =>
+                        includedItem.type === 'script' && includedItem.id === item.relationships.script.data.id
+                )?.attributes.name,
             resize: true
         },
         {
@@ -54,7 +65,7 @@ const TableRecordsList: FC<ITableRecordsList> = ({ data }) => {
         }
     ];
 
-    return <AppTable name={'RecordsList'} data={{ nodes: data ?? [] }} columns={columns} />;
+    return <AppTable name={'RecordList'} data={{ nodes: data ?? [] }} columns={columns} />;
 };
 
-export default TableRecordsList;
+export default RecordList;
