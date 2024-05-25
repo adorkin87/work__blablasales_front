@@ -30,32 +30,32 @@ class AgentListStore {
     }
 
     getList(getParams?: TAPIGetParams) {
-        if (this.state === 'pending') return;
-        this.state = 'pending';
+        if (this.state === 'loading') return;
+        this.state = 'loading';
 
         this.rootStore.api.agent
             .list(getParams)
-            .then(
-                action((res) => {
+            .then((res) =>
+                runInAction(() => {
                     this.data = res.data;
                     this.meta = res.meta!;
                     this.state = 'done';
                 })
             )
-            .catch(action(() => this.resetStore));
+            .catch(() => runInAction(() => this.errorStore()));
     }
 
-    async del(agentID: string) {
-        if (this.state === 'pending') return;
-        this.state = 'pending';
+    del(agentID: string) {
+        if (this.state === 'loading') return;
+        this.state = 'loading';
 
         this.rootStore.api.agent
             .del(agentID)
-            .then(action(() => (this.state = 'done')))
-            .catch(this.resetStore);
+            .then(() => runInAction(() => (this.state = 'done')))
+            .catch(() => runInAction(() => this.errorStore()));
     }
 
-    private resetStore() {
+    private errorStore() {
         this.data = [];
         this.meta = null;
         this.state = 'error';

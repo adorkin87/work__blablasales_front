@@ -31,55 +31,49 @@ class AgentCardStore {
         this.rootStore = rootStore;
     }
 
-    async get(id: string) {
-        if (this.state === 'pending') return;
-        this.state = 'pending';
+    get(id: string) {
+        if (this.state === 'loading') return;
+        this.state = 'loading';
 
-        const res = await this.rootStore.api.agent.one(id);
-
-        if (!res || 'errors' in res) {
-            runInAction(() => {
-                this.initData = this.createEmptyAgent();
-                this.data = this.createEmptyAgent();
-                /* add error toast */
-                this.state = 'error';
-            });
-            return;
-        }
-
-        runInAction(() => {
-            this.initData = res.data;
-            this.data = cloneDeep(this.initData);
-            this.state = 'done';
-        });
+        this.rootStore.api.agent
+            .one(id)
+            .then((res) =>
+                runInAction(() => {
+                    this.initData = res.data;
+                    this.data = cloneDeep(this.initData);
+                    this.state = 'done';
+                })
+            )
+            .catch(() => runInAction(() => this.errorStore()));
     }
 
-    async add() {
-        if (this.state === 'pending' || !this.data) return;
-        this.state = 'pending';
+    add() {
+        if (this.state === 'loading' || !this.data) return;
+        this.state = 'loading';
 
-        const res = await this.rootStore.api.agent.add(this.data);
-
-        if (!res || 'errors' in res) {
-            runInAction(() => {
-                // res.errors.map((error) => toast(error.title));
-                this.state = 'error';
-            });
-            return;
-        }
-
-        runInAction(() => {
-            this.initData = res.data;
-            this.data = cloneDeep(this.initData);
-            this.state = 'done';
-            toast.success('Менеджер успешно добавлен');
-        });
+        this.rootStore.api.agent
+            .add(this.data)
+            .then((res) => {
+                if ('errors' in res) {
+                    runInAction(() => {
+                        res.errors.map((error) => toast(error.title));
+                        this.state = 'done';
+                    });
+                    return;
+                }
+                runInAction(() => {
+                    this.initData = res.data;
+                    this.data = cloneDeep(this.initData);
+                    this.state = 'done';
+                    toast.success('Менеджер успешно добавлен');
+                });
+            })
+            .catch(() => runInAction(() => this.errorStore()));
     }
 
-    async upd(id: string) {
-        if (this.state === 'pending' || !this.data) return;
-        if (isEqual(this.initData, this.data)) return;
-        this.state = 'pending';
+    upd(id: string) {
+        if (this.state === 'loading' || !this.data || isEqual(this.initData, this.data)) return;
+        this.state = 'loading';
 
         const payload: Partial<TAgent['attributes']> = {};
         let key: keyof TAgent['attributes'];
@@ -88,21 +82,24 @@ class AgentCardStore {
                 payload[key] = this.data.attributes[key];
         }
 
-        const res = await this.rootStore.api.agent.upd(id, { ...this.data, attributes: { ...payload } });
-
-        if (!res || 'errors' in res) {
-            runInAction(() => {
-                /* add error toast */
-                this.state = 'error';
-            });
-            return;
-        }
-
-        runInAction(() => {
-            this.initData = res.data;
-            this.data = cloneDeep(this.initData);
-            this.state = 'done';
-        });
+        this.rootStore.api.agent
+            .upd(id, { ...this.data, attributes: { ...payload } })
+            .then((res) => {
+                if ('errors' in res) {
+                    runInAction(() => {
+                        res.errors.map((error) => toast(error.title));
+                        this.state = 'done';
+                    });
+                    return;
+                }
+                runInAction(() => {
+                    this.initData = res.data;
+                    this.data = cloneDeep(this.initData);
+                    this.state = 'done';
+                    toast.success('Менеджер успешно обновлен');
+                });
+            })
+            .catch(() => runInAction(() => this.errorStore()));
     }
 
     private createEmptyAgent(): TAgent {
@@ -118,7 +115,7 @@ class AgentCardStore {
     }
 
     createNewAgent() {
-        this.state = 'pending';
+        this.state = 'loading';
 
         this.data = this.createEmptyAgent();
         this.changed = false;
@@ -130,6 +127,13 @@ class AgentCardStore {
         if (!this.data) return;
         this.data.attributes[fieldName] = newValue;
         this.changed = !isEqual(this.initData, this.data);
+    }
+
+    private errorStore() {
+        this.data = this.createEmptyAgent();
+        this.initData = this.createEmptyAgent();
+        this.changed = false;
+        this.state = 'error';
     }
 }
 

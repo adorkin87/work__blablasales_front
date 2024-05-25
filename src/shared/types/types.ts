@@ -1,1 +1,1 @@
-export type TStoreState = 'init' | 'done' | 'pending' | 'error';
+export type TStoreState = 'init' | 'done' | 'pending' | 'error' | 'loading';
