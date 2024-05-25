@@ -3,8 +3,8 @@ import { toast } from 'react-toastify';
 import { cloneDeep, isEqual } from 'lodash';
 
 //types
-import type RootStore from 'src/app/model/root.store.ts';
 import type { TStoreState } from 'src/shared/types/types.ts';
+import type RootStore from 'src/app/model/root.store.ts';
 import type { TAgent } from '../types/types.ts';
 
 class AgentCardStore {
@@ -19,8 +19,8 @@ class AgentCardStore {
     constructor(rootStore: RootStore) {
         makeObservable(this, {
             data: observable,
-            state: observable,
             changed: observable,
+            state: observable,
             get: action,
             add: action,
             upd: action,
@@ -37,7 +37,7 @@ class AgentCardStore {
 
         const res = await this.rootStore.api.agent.one(id);
 
-        if ('errors' in res) {
+        if (!res || 'errors' in res) {
             runInAction(() => {
                 this.initData = this.createEmptyAgent();
                 this.data = this.createEmptyAgent();
@@ -60,9 +60,9 @@ class AgentCardStore {
 
         const res = await this.rootStore.api.agent.add(this.data);
 
-        if ('errors' in res) {
+        if (!res || 'errors' in res) {
             runInAction(() => {
-                /* add error toast */
+                // res.errors.map((error) => toast(error.title));
                 this.state = 'error';
             });
             return;
@@ -90,7 +90,7 @@ class AgentCardStore {
 
         const res = await this.rootStore.api.agent.upd(id, { ...this.data, attributes: { ...payload } });
 
-        if ('errors' in res) {
+        if (!res || 'errors' in res) {
             runInAction(() => {
                 /* add error toast */
                 this.state = 'error';

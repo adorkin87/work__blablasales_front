@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { toast } from 'react-toastify';
 
 function createHttpPlugin() {
     const httpClient = axios.create({
@@ -15,6 +16,7 @@ function createHttpPlugin() {
 
     function handleError(error: AxiosError) {
         import.meta.env.DEV && console.error(error);
+        toast.error('Ошибка при получении данных', { autoClose: false, theme: 'colored' });
         return error;
     }
 

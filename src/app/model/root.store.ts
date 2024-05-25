@@ -4,15 +4,15 @@ import type { TViewerStore } from '../../entities/viewer';
 
 //stores
 import createViewerStore from 'src/entities/viewer';
-import { RecordsListStore } from 'src/entities/record';
-import { AgentCardStore, AgentsListStore } from 'src/entities/agent';
+import { AgentCardStore, AgentListStore } from 'src/entities/agent';
 import { DictsListStore, ScriptsListStore } from 'src/entities/script';
+import { RecordsListStore } from 'src/entities/record';
 
 class RootStore {
     api: TApiInstance;
     viewer: TViewerStore;
 
-    agentsList: AgentsListStore;
+    agentsList: AgentListStore;
     agentCard: AgentCardStore;
 
     recordsList: RecordsListStore;
@@ -24,13 +24,13 @@ class RootStore {
         this.api = api;
         this.viewer = createViewerStore(this);
 
-        this.agentsList = new AgentsListStore(this);
+        this.agentsList = new AgentListStore(this);
         this.agentCard = new AgentCardStore(this);
 
-        this.recordsList = new RecordsListStore(this);
-
-        this.scriptsList = new ScriptsListStore(this);
         this.dictsList = new DictsListStore(this);
+        this.scriptsList = new ScriptsListStore(this);
+
+        this.recordsList = new RecordsListStore(this);
     }
 }
 

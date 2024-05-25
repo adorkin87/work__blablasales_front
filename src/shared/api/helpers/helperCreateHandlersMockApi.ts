@@ -28,10 +28,13 @@ const helperCreateHandlersMockApi = ({
             const start = page ? (page - 1) * (perPage ? perPage : 0) : 0;
             const end = perPage ? (page ? page * perPage : perPage) : undefined;
 
-            return HttpResponse.json({
-                data: fakeDB.endpoints[dbEndpoint].slice(start, end),
-                meta: { count: fakeDB.endpoints[dbEndpoint].length }
-            });
+            return HttpResponse.json(
+                {
+                    data: fakeDB.endpoints[dbEndpoint].slice(start, end),
+                    meta: { count: fakeDB.endpoints[dbEndpoint].length }
+                },
+                { status: 500 }
+            );
         }),
 
         one: http.get(`${apiEndpoint}/:id`, async ({ params }) => {

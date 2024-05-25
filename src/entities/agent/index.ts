@@ -11,9 +11,9 @@ import createAgentHandlers from 'src/entities/agent/mocks/createAgentHandlers.ts
 export { createAgentMock, createAgentHandlers };
 
 //store
-import AgentsListStore from './model/agentsList.store.ts';
+import AgentListStore from './model/agentList.store.ts';
 import AgentCardStore from './model/agentCard.store.ts';
-export { AgentsListStore, AgentCardStore };
+export { AgentListStore, AgentCardStore };
 
 //ui
 import AgentsList from './ui/AgentsList.tsx';

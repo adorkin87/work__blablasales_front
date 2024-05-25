@@ -8,9 +8,9 @@ function createApi(httpPlugin: AxiosInstance) {
     return {
         // auth: createAuthApi(httpPlugin),
         agent: createAgentApi(httpPlugin),
-        record: createRecordApi(httpPlugin),
         dict: createDictApi(httpPlugin),
-        script: createScriptApi(httpPlugin)
+        script: createScriptApi(httpPlugin),
+        record: createRecordApi(httpPlugin)
     };
 }
 
