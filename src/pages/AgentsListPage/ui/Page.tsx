@@ -49,22 +49,22 @@ const Page = observer(() => {
     };
 
     const handleBtnSave = async () => {
-        agentStore.data?.id ? await agentStore.upd(agentStore.data.id) : await agentStore.add();
+        agentStore.data?.id ? agentStore.upd(agentStore.data.id) : agentStore.add();
         setShowAgentCard(false);
-        void rootStore.agentsList.getList();
+        rootStore.agentsList.getList();
     };
 
     const handleMenuEdit = (e: MouseEvent, itemID: string) => {
         e.stopPropagation();
         agentStore.createNewAgent();
-        void agentStore.get(itemID);
+        agentStore.get(itemID);
         setShowAgentCard(true);
     };
 
     const handleMenuDel = async (e: MouseEvent, itemID: string) => {
         e.stopPropagation();
-        await rootStore.agentsList.del(itemID);
-        await rootStore.agentsList.getList();
+        rootStore.agentsList.del(itemID);
+        rootStore.agentsList.getList();
     };
 
     //**************************************************************************************************

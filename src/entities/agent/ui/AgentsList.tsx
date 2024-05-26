@@ -8,13 +8,13 @@ import type { TAgent } from '../types/types.ts';
 import AppTable from 'src/shared/ui/AppTable';
 import AppPopUpMenu, { AppPopUpBtnDel, AppPopUpBtnEdit } from 'src/shared/ui/AppPopUpMenu';
 
-interface ITableRecordsList {
+interface IProps {
     data?: TAgent[] | null;
     handleMenuEdit: (e: MouseEvent, itemID: string) => void;
     handleMenuDel: (e: MouseEvent, itemID: string) => Promise<void>;
 }
 
-const AgentsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel }) => {
+const AgentsList: FC<IProps> = ({ data, handleMenuEdit, handleMenuDel }) => {
     const columns: Column<Required<TAgent>>[] = [
         {
             label: 'Имя',
@@ -55,7 +55,13 @@ const AgentsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel
         // }
     ];
 
-    return <AppTable name={'AgentsList'} data={{ nodes: data ?? [] }} columns={columns} />;
+    return (
+        <AppTable
+            // name={'AgentsList'}
+            data={{ nodes: data ?? [] }}
+            columns={columns}
+        />
+    );
 };
 
 export default AgentsList;

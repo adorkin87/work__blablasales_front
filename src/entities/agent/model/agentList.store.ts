@@ -1,4 +1,4 @@
-import { action, autorun, makeObservable, observable, runInAction } from 'mobx';
+import { action, autorun, makeObservable, observable } from 'mobx';
 
 //types
 import type { TStoreState } from 'src/shared/types/types.ts';
@@ -35,14 +35,14 @@ class AgentListStore {
 
         this.rootStore.api.agent
             .list(getParams)
-            .then((res) =>
-                runInAction(() => {
+            .then(
+                action((res) => {
                     this.data = res.data;
                     this.meta = res.meta!;
                     this.state = 'done';
                 })
             )
-            .catch(() => runInAction(() => this.errorStore()));
+            .catch(this.setErrorStore);
     }
 
     del(agentID: string) {
@@ -51,11 +51,11 @@ class AgentListStore {
 
         this.rootStore.api.agent
             .del(agentID)
-            .then(() => runInAction(() => (this.state = 'done')))
-            .catch(() => runInAction(() => this.errorStore()));
+            .then(action(() => (this.state = 'done')))
+            .catch(this.setErrorStore);
     }
 
-    private errorStore() {
+    private setErrorStore() {
         this.data = [];
         this.meta = null;
         this.state = 'error';

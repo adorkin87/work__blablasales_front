@@ -26,18 +26,18 @@ enum TypeDictToReadable {
     'objection' = 'Возражение'
 }
 
-interface IDictCard {
+interface IProps {
     dictStore: DictCardStore;
     onShow: boolean;
 }
 
-const DictCard: FC<IDictCard> = observer(({ dictStore, onShow }) => {
+const DictCard: FC<IProps> = observer(({ dictStore, onShow }) => {
     if (!dictStore.data) return;
 
     const selectValue: TDict['attributes']['type'] = dictStore.data.attributes.type ?? 'marker';
 
     //**************************************************************************************************
-    //agentHandlers
+    //handlers
 
     const handleInputChange = (
         fieldName: keyof TDict['attributes'],

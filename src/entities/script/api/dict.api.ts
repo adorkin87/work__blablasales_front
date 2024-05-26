@@ -1,5 +1,4 @@
 import type { AxiosInstance } from 'axios';
-
 import type { TDict } from '../types/types.ts';
 
 import { helperCreateAPI } from 'src/shared/api';

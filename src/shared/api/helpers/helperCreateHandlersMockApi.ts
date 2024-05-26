@@ -23,8 +23,8 @@ const helperCreateHandlersMockApi = ({
             await delay(delayResponse);
 
             const url = new URL(request.url);
-            const page = Number(url.searchParams.get('page'));
-            const perPage = Number(url.searchParams.get('perPage'));
+            const page = Number(url.searchParams.get('page[offset]'));
+            const perPage = Number(url.searchParams.get('page[limit]'));
             const start = page ? (page - 1) * (perPage ? perPage : 0) : 0;
             const end = perPage ? (page ? page * perPage : perPage) : undefined;
 
@@ -32,8 +32,8 @@ const helperCreateHandlersMockApi = ({
                 {
                     data: fakeDB.endpoints[dbEndpoint].slice(start, end),
                     meta: { count: fakeDB.endpoints[dbEndpoint].length }
-                },
-                { status: 500 }
+                }
+                // { status: 401 }
             );
         }),
 

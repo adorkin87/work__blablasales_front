@@ -49,22 +49,22 @@ const DictsListPage = observer(() => {
     };
 
     const handleBtnSave = async () => {
-        dictStore.data?.id ? await dictStore.upd(dictStore.data.id) : await dictStore.add();
+        dictStore.data?.id ? dictStore.upd(dictStore.data.id) : dictStore.add();
         setShowDictCard(false);
-        void rootStore.dictsList.get();
+        void rootStore.dictsList.getList();
     };
 
     const handleMenuEdit = (e: MouseEvent, itemID: string) => {
         e.stopPropagation();
         dictStore.createNewDict();
-        void dictStore.get(itemID);
+        dictStore.get(itemID);
         setShowDictCard(true);
     };
 
     const handleMenuDel = async (e: MouseEvent, itemID: string) => {
         e.stopPropagation();
-        await rootStore.dictsList.del(itemID);
-        await rootStore.dictsList.get();
+        rootStore.dictsList.del(itemID);
+        rootStore.dictsList.getList();
     };
 
     //**************************************************************************************************

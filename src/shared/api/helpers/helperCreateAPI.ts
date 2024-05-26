@@ -4,10 +4,10 @@ import type { TAPIGetParams, TAPIResponse } from '../types/types.ts';
 
 import convertGetParams from '../lib/convertGetParams.ts';
 
-export default function helperCreateAPI<T>(httpClient: AxiosInstance, endpoint: string) {
+export default function helperCreateAPI<T, I = undefined>(httpClient: AxiosInstance, endpoint: string) {
     return {
         async list(getParams?: TAPIGetParams) {
-            return (await httpClient.get<TAPIResponse<T[]>>(`${endpoint}${convertGetParams(getParams)}`)).data;
+            return (await httpClient.get<TAPIResponse<T[], I>>(`${endpoint}${convertGetParams(getParams)}`)).data;
         },
 
         async one(id: string) {

@@ -1,12 +1,12 @@
-import { action, autorun, makeObservable, observable, runInAction } from 'mobx';
+import { action, autorun, makeObservable, observable } from 'mobx';
 
 //types
-import { TAPIGetParams, TAPIResponseMeta } from 'src/shared/api';
-import type RootStore from 'src/app/model/root.store.ts';
 import type { TStoreState } from 'src/shared/types/types.ts';
+import type RootStore from 'src/app/model/root.store.ts';
+import { TAPIGetParams, TAPIResponseMeta } from 'src/shared/api';
 import { TDict } from '../types/types.ts';
 
-class DictsListStore {
+class DictListStore {
     rootStore: RootStore;
 
     data: TDict[] = [];
@@ -19,38 +19,47 @@ class DictsListStore {
             data: observable,
             meta: observable,
             state: observable,
-            get: action,
+            getList: action,
             del: action
         });
 
         this.rootStore = rootStore;
 
-        autorun(async () => this.get());
+        const initDictList = autorun(async () => this.getList());
+        initDictList();
     }
 
-    async get(getParams?: TAPIGetParams) {
-        if (this.state === 'pending') return;
-        this.state = 'pending';
+    getList(getParams?: TAPIGetParams) {
+        if (this.state === 'loading') return;
+        this.state = 'loading';
 
-        const res = await this.rootStore.api.dict.list(getParams);
-
-        runInAction(() => {
-            this.data = res.data;
-            this.meta = res.meta!;
-            this.state = 'done';
-        });
+        this.rootStore.api.dict
+            .list(getParams)
+            .then(
+                action((res) => {
+                    this.data = res.data;
+                    this.meta = res.meta!;
+                    this.state = 'done';
+                })
+            )
+            .catch(this.setErrorStore);
     }
 
-    async del(dictID: string) {
-        if (this.state === 'pending') return;
-        this.state = 'pending';
+    del(dictID: string) {
+        if (this.state === 'loading') return;
+        this.state = 'loading';
 
-        const res = await this.rootStore.api.dict.del(dictID);
+        this.rootStore.api.dict
+            .del(dictID)
+            .then(action(() => (this.state = 'done')))
+            .catch(this.setErrorStore);
+    }
 
-        runInAction(() => {
-            this.state = 'done';
-        });
+    private setErrorStore() {
+        this.data = [];
+        this.meta = null;
+        this.state = 'error';
     }
 }
 
-export default DictsListStore;
+export default DictListStore;

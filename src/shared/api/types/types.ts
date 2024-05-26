@@ -5,32 +5,28 @@ export type TAPIGetParams = {
 
 export type TAPIResponseMeta = {
     count?: number;
+    used?: boolean;
 };
 
-// export type TAPIResponseDone<T> = {
-//     data: T;
-//     mata?: TAPIResponseMeta;
-//     includes?: any;
-//     error: never;
-// };
-//
-// export type TAPIResponseError = {
-//     error: { [key in string]: string }[];
-//     meta?: TAPIResponseMeta;
-//     data: never;
-//     includes: never;
-// };
-
-//2variant
-export type TAPIResponse<T, I = undefined> = {
+export type TAPIResponseOk<T, I> = {
     data: T;
     meta?: TAPIResponseMeta;
     included?: I[];
+    errors: never;
 };
 
-//3 variant
-// type TExclude<D, E> = { [K in Exclude<keyof D, keyof E>]?: never };
-//
-// export type TAPIResponse<T> =
-//     | (TExclude<TAPIResponseDone<T>, TAPIResponseError> & TAPIResponseError)
-//     | (TExclude<TAPIResponseError, TAPIResponseDone<T>> & TAPIResponseDone<T>);
+export type TAPIResponseError = {
+    errors: { title?: string; detail?: string }[];
+    meta?: TAPIResponseMeta;
+    data: never;
+    included: never;
+};
+
+export type TAPIResponse<T, I = undefined> = TAPIResponseOk<T, I> | TAPIResponseError;
+//2variant
+// export type TAPIResponse<T, I = undefined | void> = {
+//     data: T;
+//     meta?: TAPIResponseMeta;
+//     included?: I[];
+//     errors: never;
+// };

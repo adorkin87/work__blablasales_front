@@ -65,7 +65,13 @@ const RecordList: FC<IProps> = ({ data, included }) => {
         }
     ];
 
-    return <AppTable name={'RecordList'} data={{ nodes: data ?? [] }} columns={columns} />;
+    return (
+        <AppTable
+            // name={'RecordList'}
+            data={{ nodes: data ?? [] }}
+            columns={columns}
+        />
+    );
 };
 
 export default RecordList;

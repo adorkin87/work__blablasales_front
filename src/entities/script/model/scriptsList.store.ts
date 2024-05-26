@@ -1,8 +1,8 @@
-import { action, autorun, makeObservable, observable, runInAction } from 'mobx';
+import { action, autorun, makeObservable, observable } from 'mobx';
 
-import type { TAPIGetParams, TAPIResponseMeta } from 'src/shared/api';
-import type RootStore from 'src/app/model/root.store.ts';
 import type { TStoreState } from 'src/shared/types/types.ts';
+import type RootStore from 'src/app/model/root.store.ts';
+import type { TAPIGetParams, TAPIResponseMeta } from 'src/shared/api';
 import type { TDict, TScript } from '../types/types.ts';
 
 class ScriptsListStore {
@@ -25,32 +25,42 @@ class ScriptsListStore {
 
         this.rootStore = rootStore;
 
-        autorun(async () => this.getList());
+        const initScriptList = autorun(async () => this.getList());
+        initScriptList();
     }
 
-    async getList(getParams?: TAPIGetParams) {
-        if (this.state === 'pending') return;
-        this.state = 'pending';
+    getList(getParams?: TAPIGetParams) {
+        if (this.state === 'loading') return;
+        this.state = 'loading';
 
-        const res = await this.rootStore.api.script.list(getParams);
-
-        runInAction(() => {
-            this.data = res.data;
-            this.included = res.included as Required<TDict[]>;
-            this.meta = res.meta!;
-            this.state = 'done';
-        });
+        this.rootStore.api.script
+            .list(getParams)
+            .then(
+                action((res) => {
+                    this.data = res.data;
+                    this.included = res.included!;
+                    this.meta = res.meta!;
+                    this.state = 'done';
+                })
+            )
+            .catch(this.setErrorStore);
     }
 
-    async del(scriptID: string) {
-        if (this.state === 'pending') return;
-        this.state = 'pending';
+    del(scriptID: string) {
+        if (this.state === 'loading') return;
+        this.state = 'loading';
 
-        const res = await this.rootStore.api.script.del(scriptID);
+        this.rootStore.api.script
+            .del(scriptID)
+            .then(action(() => (this.state = 'done')))
+            .catch(this.setErrorStore);
+    }
 
-        runInAction(() => {
-            this.state = 'done';
-        });
+    private setErrorStore() {
+        this.data = [];
+        this.included = [];
+        this.meta = null;
+        this.state = 'error';
     }
 }
 

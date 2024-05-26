@@ -20,23 +20,23 @@ enum Types {
     'objection' = 'Возражение'
 }
 
-interface ITableRecordsList {
+interface IProps {
     data?: TDict[] | null;
     handleMenuEdit: (e: MouseEvent, itemID: string) => void;
     handleMenuDel: (e: MouseEvent, itemID: string) => Promise<void>;
 }
 
-const DictsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel }) => {
-    const [ids, setIds] = useState<string[]>([]);
+const DictList: FC<IProps> = ({ data, handleMenuEdit, handleMenuDel }) => {
+    const [idsExpand, setIdsExpand] = useState<string[]>([]);
 
     //**************************************************************************************************
-    //agentHandlers
+    //handlers
 
     const handleExpand = (item: TDict) => {
-        if (ids.includes(item.id!)) {
-            setIds(ids.filter((id) => id !== item.id));
+        if (idsExpand.includes(item.id!)) {
+            setIdsExpand(idsExpand.filter((id) => id !== item.id));
         } else {
-            setIds(ids.concat(item.id!));
+            setIdsExpand(idsExpand.concat(item.id!));
         }
     };
 
@@ -48,7 +48,7 @@ const DictsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel 
             label: 'Название',
             renderCell: (item) => (
                 <div className={'flex items-center gap-2'}>
-                    <div className={classNames('expand-arrow', { 'expand-arrow_down': ids.includes(item.id) })} />
+                    <div className={classNames('expand-arrow', { 'expand-arrow_down': idsExpand.includes(item.id) })} />
                     {item.attributes.name}
                 </div>
             ),
@@ -61,7 +61,7 @@ const DictsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel 
                 <div className={'flex items-center justify-between gap-2'}>
                     <div className={'ellipsis'}>{Types[item.attributes.type]}</div>
                     <AppPopUpMenu>
-                        <AppPopUpBtnExpand onExpand={ids.includes(item.id)} onClick={() => handleExpand(item)} />
+                        <AppPopUpBtnExpand onExpand={idsExpand.includes(item.id)} onClick={() => handleExpand(item)} />
                         <AppPopUpDivider />
                         <AppPopUpBtnEdit onClick={(e) => handleMenuEdit(e, item.id)} />
                         <AppPopUpBtnDel onClick={(e) => handleMenuDel(e, item.id)} />
@@ -89,14 +89,14 @@ const DictsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel 
     const ROW_OPTIONS = {
         renderAfterRow: (item: Required<TDict>) => (
             <>
-                {ids.includes(item.id) && (
+                {idsExpand.includes(item.id) && (
                     <tr style={{ gridColumn: '1 / -1', display: 'flex' }}>
                         <td className={'mb-4 px-4 w-full'}>
                             <p>
                                 <span className={'fw-600 text-sm'}>триггеры:</span>{' '}
                                 {item.attributes.triggers?.map((trigger) => trigger).join(', ')}
                             </p>
-                            <p className={'fw-600 text-sm'}>используется:</p>
+                            {/*<p className={'fw-600 text-sm'}>используется:</p>*/}
                         </td>
                     </tr>
                 )}
@@ -113,7 +113,7 @@ const DictsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel 
 
     return (
         <AppTable
-            name={'DictsList'}
+            // name={'DictList'}
             data={{ nodes: data ?? [] }}
             columns={columns}
             rowProps={ROW_PROPS}
@@ -122,4 +122,4 @@ const DictsList: FC<ITableRecordsList> = ({ data, handleMenuEdit, handleMenuDel 
     );
 };
 
-export default DictsList;
+export default DictList;

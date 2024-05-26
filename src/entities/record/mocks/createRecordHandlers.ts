@@ -18,8 +18,8 @@ const createRecordHandlers = (fakeDB: { endpoints: Record<string, any[]> }) => {
             await delay(delayResponse);
 
             const url = new URL(request.url);
-            const page = Number(url.searchParams.get('page'));
-            const perPage = Number(url.searchParams.get('perPage'));
+            const page = Number(url.searchParams.get('page[offset]'));
+            const perPage = Number(url.searchParams.get('page[limit]'));
             const start = page ? (page - 1) * (perPage ? perPage : 0) : 0;
             const end = perPage ? (page ? page * perPage : perPage) : undefined;
 

@@ -6,7 +6,6 @@ export type TDict = {
         type: 'kev' | 'marker' | 'objection';
         triggers: string[];
         comment?: string;
-        used?: number;
     };
 };
 
@@ -20,8 +19,4 @@ export type TScript = {
         marker: { id: string; priority: number }[];
         objection: { id: string; priority?: number }[];
     };
-    //по спецификации надо, по сути не надо
-    // relationships: {
-    //     dict: { type: 'dict'; id: string }[] | [];
-    // };
 };

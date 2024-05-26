@@ -1,11 +1,11 @@
-import { action, makeObservable, observable, runInAction } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
+import { toast } from 'react-toastify';
+import { cloneDeep, isEqual } from 'lodash';
 
 //types
-import type RootStore from 'src/app/model/root.store.ts';
 import type { TStoreState } from 'src/shared/types/types.ts';
+import type RootStore from 'src/app/model/root.store.ts';
 import type { TDict } from '../types/types.ts';
-
-import { cloneDeep, isEqual } from 'lodash';
 
 class DictCardStore {
     rootStore: RootStore;
@@ -19,8 +19,8 @@ class DictCardStore {
     constructor(rootStore: RootStore) {
         makeObservable(this, {
             data: observable,
-            state: observable,
             changed: observable,
+            state: observable,
             get: action,
             add: action,
             upd: action,
@@ -34,81 +34,77 @@ class DictCardStore {
         this.rootStore = rootStore;
     }
 
-    async get(id: string) {
-        if (this.state === 'pending') return;
-        this.state = 'pending';
+    get(id: string) {
+        if (this.state === 'loading') return;
+        this.state = 'loading';
 
-        const res = await this.rootStore.api.dict.one(id);
-
-        if ('errors' in res) {
-            runInAction(() => {
-                this.initData = this.createEmptyDict();
-                this.data = this.createEmptyDict();
-                /* add error toast */
-                this.state = 'error';
-            });
-            return;
-        }
-
-        runInAction(() => {
-            this.initData = res.data;
-            this.data = cloneDeep(this.initData);
-            this.state = 'done';
-        });
+        this.rootStore.api.dict
+            .one(id)
+            .then(
+                action((res) => {
+                    this.initData = res.data;
+                    this.data = cloneDeep(this.initData);
+                    this.state = 'done';
+                })
+            )
+            .catch(this.setErrorStore);
     }
 
-    async add() {
-        if (this.state === 'pending' || !this.data) return;
-        this.state = 'pending';
+    add() {
+        if (this.state === 'loading' || !this.data) return;
+        this.state = 'loading';
 
         this.data.attributes.triggers = this.data.attributes.triggers.filter((trigger) => trigger !== '');
 
-        const res = await this.rootStore.api.dict.add(this.data);
-
-        if ('errors' in res) {
-            runInAction(() => {
-                /* add error toast */
-                this.state = 'error';
-            });
-            return;
-        }
-
-        runInAction(() => {
-            this.initData = res.data;
-            this.data = cloneDeep(this.initData);
-            this.state = 'done';
-        });
+        this.rootStore.api.dict
+            .add(this.data)
+            .then(
+                action((res) => {
+                    if (res.errors) {
+                        res.errors.map((err) => toast(err.title));
+                        this.state = 'done';
+                        return;
+                    }
+                    this.initData = res.data;
+                    this.data = cloneDeep(this.initData);
+                    this.state = 'done';
+                    toast.success('Словарь успешно добавлен');
+                })
+            )
+            .catch(this.setErrorStore);
     }
 
-    async upd(id: string) {
-        if (this.state === 'pending' || !this.data) return;
-        if (isEqual(this.initData, this.data)) return;
-        this.state = 'pending';
+    upd(id: string) {
+        if (this.state === 'loading' || !this.data || isEqual(this.initData, this.data)) return;
+        this.state = 'loading';
 
         this.data.attributes.triggers = this.data.attributes.triggers.filter((trigger) => trigger !== '');
 
         const payload: Partial<TDict['attributes']> = {};
         let key: keyof TDict['attributes'];
         for (key in this.data.attributes) {
-            if (!isEqual(this.data.attributes[key], this.initData!.attributes[key]))
+            if (!isEqual(this.data.attributes[key], this.initData!.attributes[key])) {
+                // @ts-ignore
                 payload[key] = this.data.attributes[key];
+            }
         }
 
-        const res = await this.rootStore.api.dict.upd(id, { ...this.data, attributes: { ...payload } });
-
-        if ('errors' in res) {
-            runInAction(() => {
-                /* add error toast */
-                this.state = 'error';
-            });
-            return;
-        }
-
-        runInAction(() => {
-            this.initData = res.data;
-            this.data = cloneDeep(this.initData);
-            this.state = 'done';
-        });
+        this.rootStore.api.dict
+            .upd(id, { ...this.data, attributes: { ...payload } })
+            .then(
+                action((res) => {
+                    if (res.errors) {
+                        res.errors.map((err) => toast(err.title));
+                        this.state = 'done';
+                        return;
+                    }
+                    this.initData = res.data;
+                    this.data = cloneDeep(this.initData);
+                    this.state = 'done';
+                    toast.success('Словарь успешно обновлен');
+                })
+            )
+            .catch(this.setErrorStore);
     }
 
     private createEmptyDict(): TDict {
@@ -132,15 +128,22 @@ class DictCardStore {
         this.state = 'done';
     }
 
+    private setErrorStore() {
+        this.data = this.createEmptyDict();
+        this.initData = this.createEmptyDict();
+        this.changed = false;
+        this.state = 'error';
+    }
+
     updTextField(fieldName: keyof TDict['attributes'], newValue: string) {
         if (!this.data) return;
+        // @ts-ignore
         this.data.attributes[fieldName] = newValue;
         this.changed = !isEqual(this.initData, this.data);
     }
 
     addTrigger() {
         if (!this.data) return;
-        // if (this.data.attributes.triggers.find((item) => item === '') !== undefined) return;
         this.data.attributes.triggers.push('');
         this.changed = !isEqual(this.initData, this.data);
     }

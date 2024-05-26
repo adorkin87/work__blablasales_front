@@ -16,7 +16,10 @@ function createHttpPlugin() {
 
     function handleError(error: AxiosError) {
         import.meta.env.DEV && console.error(error);
-        toast.error('Ошибка при получении данных', { autoClose: false, theme: 'colored' });
+        if (error.response && error.response.status >= 400 && error.response.status < 500)
+            toast.error('Ошибка в запросе на сервер', { autoClose: false, theme: 'colored' });
+        if (error.response && error.response.status >= 500)
+            toast.error('На сервере произошла ошибка', { autoClose: false, theme: 'colored' });
         return error;
     }
 

@@ -42,7 +42,10 @@ const RecordsListPage = observer(() => {
     //effects
 
     useEffect(() => {
-        rootStore?.recordsList.getList({ page: navCurrent, perPage: rootStore.viewer.conf.cntRowTable.value });
+        rootStore?.recordsList.getList({
+            'page[offset]': navCurrent,
+            'page[limit]': rootStore.viewer.conf.cntRowTable.value
+        });
     }, [navCurrent]);
 
     useEffect(() => {
@@ -79,7 +82,7 @@ const RecordsListPage = observer(() => {
 
     const refreshData = () => {
         setNavCurrent(1);
-        rootStore?.recordsList.getList({ page: 1, perPage: rootStore.viewer.conf.cntRowTable.value });
+        rootStore?.recordsList.getList({ 'page[offset]': 1, 'page[limit]': rootStore.viewer.conf.cntRowTable.value });
     };
 
     // *************************************************************************************************
