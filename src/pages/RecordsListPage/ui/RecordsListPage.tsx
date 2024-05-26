@@ -74,7 +74,7 @@ const RecordsListPage = observer(() => {
     }, [files]);
 
     // *************************************************************************************************
-    //agentHandlers
+    //handlers
 
     const handleBtnAdd = (): void => {
         navigate('/records/upload');
@@ -87,6 +87,18 @@ const RecordsListPage = observer(() => {
 
     // *************************************************************************************************
     // render
+
+    if (
+        rootStore?.agentsList.state === 'loading' ||
+        rootStore?.dictsList.state === 'loading' ||
+        rootStore?.scriptsList.state === 'loading'
+    )
+        return (
+            <div className={'h-full w-full flex items-center justify-center gap-2'}>
+                <div className={'i-svg-spinners:blocks-shuffle-3 c-color-second text-2xl'} />
+                <p className={'c-color-main'}>Загрузка...</p>
+            </div>
+        );
 
     return (
         <UploadDropZone setFiles={setFiles} noClick={true}>

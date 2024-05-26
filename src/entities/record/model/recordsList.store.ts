@@ -1,10 +1,11 @@
-import { makeObservable, observable, runInAction, action } from 'mobx';
+import { makeObservable, observable, action } from 'mobx';
 
+import type { TStoreState } from 'src/shared/types/types.ts';
 import type RootStore from 'src/app/model/root.store.ts';
-import type { TAPIGetParams, TAPIResponseMeta, TStoreState } from 'src/shared/types/types.ts';
-import type { TRecord } from '../types/types.ts';
+import type { TAPIGetParams, TAPIResponseMeta } from 'src/shared/api';
 import type { TAgent } from 'src/entities/agent';
 import type { TScript } from 'src/entities/script';
+import type { TRecord } from '../types/types.ts';
 
 class RecordsListStore {
     rootStore: RootStore;
@@ -28,30 +29,38 @@ class RecordsListStore {
         this.state = 'done';
     }
 
-    async getList(getParams?: TAPIGetParams) {
-        if (this.state === 'pending') return;
-        this.state = 'pending';
+    getList(getParams?: TAPIGetParams) {
+        if (this.state === 'loading') return;
+        this.state = 'loading';
 
-        const res = await this.rootStore.api.record.list(getParams);
-        console.log(res);
-
-        runInAction(() => {
-            this.data = res.data;
-            this.included = res.included as Required<(TAgent | TScript)[]>;
-            this.meta = res.meta!;
-            this.state = 'done';
-        });
+        this.rootStore.api.record
+            .list(getParams)
+            .then(
+                action((res) => {
+                    this.data = res.data;
+                    this.included = res.included!;
+                    this.meta = res.meta!;
+                    this.state = 'done';
+                })
+            )
+            .catch(this.setErrorStore);
     }
 
-    async del(recordID: string) {
-        if (this.state === 'pending') return;
-        this.state = 'pending';
+    del(recordID: string) {
+        if (this.state === 'loading') return;
+        this.state = 'loading';
 
-        const res = await this.rootStore.api.record.del(recordID);
+        this.rootStore.api.record
+            .del(recordID)
+            .then(action(() => (this.state = 'done')))
+            .catch(this.setErrorStore);
+    }
 
-        runInAction(() => {
-            this.state = 'done';
-        });
+    private setErrorStore() {
+        this.data = [];
+        this.included = [];
+        this.meta = null;
+        this.state = 'error';
     }
 }
 

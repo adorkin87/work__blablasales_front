@@ -1,6 +1,6 @@
 export type TAPIGetParams = {
-    page?: number;
-    perPage?: number;
+    'page[offset]'?: number;
+    'page[limit]'?: number;
 };
 
 export type TAPIResponseMeta = {

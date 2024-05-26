@@ -40,6 +40,14 @@ const createRecordHandlers = (fakeDB: { endpoints: Record<string, any[]> }) => {
                 ],
                 meta: { count: fakeDB.endpoints.record.length }
             });
+        }),
+
+        http.post(import.meta.env.VITE_ENDPOINT_RECORD, async ({ request }) => {
+            await delay(delayResponse);
+
+            console.log(await request);
+
+            return HttpResponse.json({});
         })
     ];
 };

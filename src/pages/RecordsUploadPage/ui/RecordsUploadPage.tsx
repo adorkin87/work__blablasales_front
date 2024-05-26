@@ -8,6 +8,8 @@ import DurationAudio from 'src/features/Records/DurationAudio/DurationAudio.tsx'
 
 //local components
 import TableUploadRecordsList from './TableUploadRecordsList.tsx';
+import { httpPlugin } from 'src/shared/api';
+import { configs } from '@typescript-eslint/eslint-plugin';
 // import useCalculateDurationAudio from 'src/shared/hooks/useCalculateDurationAudio.tsx';
 
 const RecordsUploadPage = () => {
@@ -34,7 +36,7 @@ const RecordsUploadPage = () => {
     }, []);
 
     // *************************************************************************************************
-    //agentHandlers
+    //handlers
 
     const handleUploadFiles = (newFiles: File[]) => {
         const uploaded = files ? [...files] : [];
@@ -45,6 +47,27 @@ const RecordsUploadPage = () => {
         });
 
         setFiles(uploaded);
+    };
+
+    const onUploadProgress = (progressEvent) => {
+        var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        console.log(percentCompleted);
+    };
+
+    const upload = () => {
+        const data = new FormData();
+        for (const [index, file] of files.entries()) {
+            data.append(index, file); // append all files
+        }
+        httpPlugin()
+            .post('/api/v1/record', data, {
+                onUploadProgress,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
     };
 
     // *************************************************************************************************
@@ -75,7 +98,7 @@ const RecordsUploadPage = () => {
                 <UploadDropZone setFiles={handleUploadFiles} noStyle={true} noDrag={true}>
                     <div className={'btn'}>Добавить</div>
                 </UploadDropZone>
-                <button className={'btn'} disabled={!files}>
+                <button className={'btn'} disabled={!files} onClick={upload}>
                     Отправить
                 </button>
             </div>
