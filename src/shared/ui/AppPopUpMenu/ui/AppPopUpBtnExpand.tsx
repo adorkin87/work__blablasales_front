@@ -1,15 +1,14 @@
-import { FC, MouseEvent } from 'react';
+import { FC } from 'react';
 
 interface IPopUpMenuBtnExpand {
     onExpand: boolean;
-    onClick: (e: MouseEvent) => void;
 }
 
-const AppPopUpBtnExpand: FC<IPopUpMenuBtnExpand> = ({ onExpand, onClick }) => {
+const AppPopUpBtnExpand: FC<IPopUpMenuBtnExpand> = ({ onExpand }) => {
     return (
-        <div className={'pop-up-menu__item'} onClick={onClick}>
+        <div className={'pop-up-menu__item'}>
             <div className={'i-ri-expand-up-down-line c-color-second'} />
-            <p>{onExpand ? 'Свернуть' : 'Развернуть'}</p>
+            <p className={'c-color-main'}>{onExpand ? 'Свернуть' : 'Развернуть'}</p>
         </div>
     );
 };

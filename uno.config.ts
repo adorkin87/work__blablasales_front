@@ -44,6 +44,10 @@ export default defineConfig({
         'pop-up-menu__item': 'px-4 py-2 flex items-center gap-2 cursor-pointer hover:bg-color-second/25 transition-100',
 
         'expand-arrow': 'i-ri:arrow-right-s-line flex-shrink-0 c-color-second hover:c-color-main z-0 transition-100',
-        'expand-arrow_down': 'c-color-main transform-rotate-90'
+        'expand-arrow_down': 'c-color-main transform-rotate-90',
+
+        tabs__title: 'py-2 px-4 flex items-center gap-1 b-none b-rd hover:bg-color-second/25 transition-100',
+        tabs__title_active: 'bg-color-second/15',
+        tabs__content_active: 'h-180 px-4 grid grid-cols-[1fr_auto_1fr] gap-2'
     }
 });

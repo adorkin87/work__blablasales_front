@@ -19,8 +19,13 @@ export type TRecord = {
     };
 };
 
+export type TFileState = 'init' | 'loading' | 'done' | 'error';
+
 export type TUploadRecord = {
     id: number;
     file_name: string;
-    file_length: number;
+    file_length: any;
+    // agentID?: string;
+    // scriptID: string;
+    state: TFileState;
 };

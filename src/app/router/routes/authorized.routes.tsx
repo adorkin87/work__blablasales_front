@@ -2,7 +2,6 @@ import AgentsListPage from 'src/pages/AgentsListPage';
 
 import DictsListPage from 'src/pages/DictsListPage';
 import ScriptsListPage from 'src/pages/ScriptsListPage';
-import ScriptCardPage from 'src/pages/ScriptCardPage';
 
 import RecordsListPage from 'src/pages/RecordsListPage';
 import RecordsUploadPage from 'src/pages/RecordsUploadPage';
@@ -25,11 +24,7 @@ const authorizedRoutes = [
             },
             {
                 path: 'scripts',
-                children: [
-                    { index: true, element: <ScriptsListPage /> },
-                    { path: 'add', element: <ScriptCardPage /> },
-                    { path: ':id', element: <ScriptCardPage /> }
-                ]
+                element: <ScriptsListPage />
             },
             {
                 path: 'dicts',

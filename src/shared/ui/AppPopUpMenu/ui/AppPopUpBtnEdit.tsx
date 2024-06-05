@@ -1,14 +1,8 @@
-import { FC, MouseEvent } from 'react';
-
-interface IPopUpMenuBtnEditProps {
-    onClick: (e: MouseEvent) => void;
-}
-
-const AppPopUpBtnEdit: FC<IPopUpMenuBtnEditProps> = ({ onClick }) => {
+const AppPopUpBtnEdit = () => {
     return (
-        <div className={'pop-up-menu__item'} onClick={onClick}>
+        <div className={'pop-up-menu__item'}>
             <div className={'i-ri:pencil-fill c-color-second'} />
-            <p>Редактировать</p>
+            <p className={'c-color-main'}>Редактировать</p>
         </div>
     );
 };

@@ -1,12 +1,13 @@
 import { faker } from '@faker-js/faker/locale/ru';
 
 import type { TDict, TScript } from '../types/types.ts';
+import { DictPriority } from '../types/types.ts';
 
-export function createScriptMock(dictsList: TDict[]): TScript {
-    const priority = [1, 1.5, 2];
+export function createScriptMock(dictList: TDict[]): TScript {
+    const priority = [DictPriority.low, DictPriority.normal, DictPriority.medium, DictPriority.high];
 
     //kev
-    const sourceKev = dictsList.reduce<{ id: string }[]>(
+    const sourceKev = dictList.reduce<{ id: string }[]>(
         (result, dict) => (dict.attributes.type === 'kev' ? [...result, { id: dict.id! }] : result),
         []
     );
@@ -15,7 +16,7 @@ export function createScriptMock(dictsList: TDict[]): TScript {
     });
 
     //marker
-    const sourceMarker = dictsList.reduce<{ id: string; priority: number }[]>(
+    const sourceMarker = dictList.reduce<{ id: string; priority: number }[]>(
         (result, dict) =>
             dict.attributes.type === 'marker'
                 ? [...result, { id: dict.id!, priority: faker.helpers.arrayElement(priority) }]
@@ -25,14 +26,14 @@ export function createScriptMock(dictsList: TDict[]): TScript {
     const marker = faker.helpers.uniqueArray(sourceMarker, faker.number.int({ min: 1, max: sourceMarker.length }));
 
     //objection
-    const sourceObjection = dictsList.reduce<{ id: string; priority?: number }[]>(
+    const sourceObjection = dictList.reduce<{ id: string; priority?: number }[]>(
         (result, dict) =>
             dict.attributes.type === 'objection'
                 ? [
                       ...result,
                       {
                           id: dict.id!,
-                          priority: faker.helpers.maybe(() => faker.helpers.arrayElement(priority), { probability: 1 })
+                          priority: faker.helpers.arrayElement(priority)
                       }
                   ]
                 : result,

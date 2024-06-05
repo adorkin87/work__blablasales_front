@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useState } from 'react';
+import { FC, useState } from 'react';
 
 //types
 import type { Column } from '@table-library/react-table-library/compact';
@@ -17,15 +17,15 @@ import AppPopUpMenu, {
 interface ITableRecordsList {
     data?: TScript[] | null;
     included?: TDict[];
-    handleMenuEdit: (e: MouseEvent, itemID: string) => void;
-    handleMenuDel: (e: MouseEvent, itemID: string) => Promise<void>;
+    handleMenuEdit: (itemID: string) => void;
+    handleMenuDel: (itemID: string) => void;
 }
 
 const ScriptsList: FC<ITableRecordsList> = ({ data, included, handleMenuEdit, handleMenuDel }) => {
-    const [ids, setIds] = useState<string[]>([]);
+    const [idsExpand, setIdsExpand] = useState<string[]>([]);
 
-    const getNameDict = (dictsList: { id: string }[], included: Required<TDict>[]): string[] => {
-        const ids = dictsList.map((dict) => dict.id);
+    const getNameDict = (dictList: { id: string }[], included: Required<TDict>[]): string[] => {
+        const ids = dictList.map((dict) => dict.id);
         const result = included.reduce<string[]>((result, item) => {
             if (ids.includes(item.id)) {
                 return [...result, item.attributes.name];
@@ -35,26 +35,51 @@ const ScriptsList: FC<ITableRecordsList> = ({ data, included, handleMenuEdit, ha
         return result;
     };
 
+    //**************************************************************************************************
+    //handlers
+
+    const handleExpand = (item: TScript) => {
+        if (idsExpand.includes(item.id!)) {
+            setIdsExpand(idsExpand.filter((id) => id !== item.id));
+        } else {
+            setIdsExpand(idsExpand.concat(item.id!));
+        }
+    };
+
+    //**************************************************************************************************
+    //table data
+
     const columns: Column<Required<TScript>>[] = [
         {
             label: 'Название',
             renderCell: (item) => (
                 <div className={'flex items-center justify-between'}>
                     <div className={'flex items-center gap-2'}>
-                        <div className={classNames('expand-arrow', { 'expand-arrow_down': ids.includes(item.id) })} />
+                        <div
+                            className={classNames('expand-arrow', { 'expand-arrow_down': idsExpand.includes(item.id) })}
+                        />
                         {item.attributes.name}
                     </div>
                     <div className={'flex items-center justify-between gap-2'}>
-                        <AppPopUpMenu>
-                            <AppPopUpBtnExpand onExpand={ids.includes(item.id)} onClick={() => handleExpand(item)} />
-                            <AppPopUpDivider />
-                            {/*<div className={'pop-up-menu__item'}>*/}
-                            {/*    <div className={'i-ri:file-copy-2-line c-color-second'} />*/}
-                            {/*    <p>Копировать</p>*/}
-                            {/*</div>*/}
-                            <AppPopUpBtnEdit onClick={(e) => handleMenuEdit(e, item.id)} />
-                            <AppPopUpBtnDel onClick={(e) => handleMenuDel(e, item.id)} />
-                        </AppPopUpMenu>
+                        <AppPopUpMenu
+                            items={[
+                                {
+                                    elem: <AppPopUpBtnExpand onExpand={idsExpand.includes(item.id)} />,
+                                    onClick: () => handleExpand(item)
+                                },
+                                {
+                                    elem: <AppPopUpDivider />
+                                },
+                                {
+                                    elem: <AppPopUpBtnEdit />,
+                                    onClick: () => handleMenuEdit(item.id)
+                                },
+                                {
+                                    elem: <AppPopUpBtnDel />,
+                                    onClick: () => handleMenuDel(item.id)
+                                }
+                            ]}
+                        />
                     </div>
                 </div>
             )
@@ -73,14 +98,6 @@ const ScriptsList: FC<ITableRecordsList> = ({ data, included, handleMenuEdit, ha
         // }
     ];
 
-    const handleExpand = (item: TScript) => {
-        if (ids.includes(item.id!)) {
-            setIds(ids.filter((id) => id !== item.id));
-        } else {
-            setIds(ids.concat(item.id!));
-        }
-    };
-
     const ROW_PROPS = {
         onClick: handleExpand
     };
@@ -88,7 +105,7 @@ const ScriptsList: FC<ITableRecordsList> = ({ data, included, handleMenuEdit, ha
     const ROW_OPTIONS = {
         renderAfterRow: (item: Required<TScript>) => (
             <>
-                {ids.includes(item.id) && (
+                {idsExpand.includes(item.id) && (
                     <tr style={{ gridColumn: '1 / -1', display: 'flex' }}>
                         <td className={'mb-4 px-4 w-full'}>
                             <div>
@@ -111,6 +128,9 @@ const ScriptsList: FC<ITableRecordsList> = ({ data, included, handleMenuEdit, ha
             </>
         )
     };
+
+    //**************************************************************************************************
+    //render
 
     return (
         <AppTable

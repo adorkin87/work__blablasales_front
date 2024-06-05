@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 //src components
 import UploadDropZone from 'src/features/UploadDropZone';
-import SelectManagers from 'src/features/SelectManagers';
+import SelectAgent from '../../../features/SelectAgent';
 import SelectCntRowTable from 'src/features/SelectCntRowTable';
 import AppPagination from 'src/shared/ui/AppPagination';
 import AppLoadingOverlay from 'src/shared/ui/AppLoadingOverlay';
@@ -27,7 +27,7 @@ const RecordsListPage = observer(() => {
     const paginationRef = useRef<HTMLDivElement>(null);
 
     //states
-    const [selectedManager, setSelectedManager] = useState<number>(0);
+    const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
     const [navCurrent, setNavCurrent] = useState(1);
 
     const [files, setFiles] = useState<File[] | null>(null);
@@ -44,13 +44,14 @@ const RecordsListPage = observer(() => {
     useEffect(() => {
         rootStore?.recordsList.getList({
             'page[offset]': navCurrent,
-            'page[limit]': rootStore.viewer.conf.cntRowTable.value
+            'page[limit]': rootStore.viewer.conf.cntRowTable.value,
+            'filter[agent]': selectedAgent ?? ''
         });
     }, [navCurrent]);
 
     useEffect(() => {
-        refreshData();
-    }, [rootStore?.viewer.conf.cntRowTable.value]);
+        void refreshData();
+    }, [rootStore?.viewer.conf.cntRowTable.value, selectedAgent]);
 
     useEffect(() => {
         if (tableWrapperRef.current === null) return;
@@ -80,9 +81,22 @@ const RecordsListPage = observer(() => {
         navigate('/records/upload');
     };
 
-    const refreshData = () => {
+    const refreshData = async () => {
         setNavCurrent(1);
-        rootStore?.recordsList.getList({ 'page[offset]': 1, 'page[limit]': rootStore.viewer.conf.cntRowTable.value });
+        await rootStore?.recordsList.getList({
+            'page[offset]': 1,
+            'page[limit]': rootStore.viewer.conf.cntRowTable.value,
+            'filter[agent]': selectedAgent ?? ''
+        });
+    };
+
+    const handleMenuDel = async (itemID: string) => {
+        await rootStore?.recordsList.del(itemID);
+        await rootStore?.recordsList.getList({
+            'page[offset]': navCurrent,
+            'page[limit]': rootStore.viewer.conf.cntRowTable.value,
+            'filter[agent]': selectedAgent ?? ''
+        });
     };
 
     // *************************************************************************************************
@@ -96,7 +110,7 @@ const RecordsListPage = observer(() => {
         return (
             <div className={'h-full w-full flex items-center justify-center gap-2'}>
                 <div className={'i-svg-spinners:blocks-shuffle-3 c-color-second text-2xl'} />
-                <p className={'c-color-main'}>Загрузка...</p>
+                <p className={'fw-500 c-color-main'}>Загрузка...</p>
             </div>
         );
 
@@ -121,7 +135,7 @@ const RecordsListPage = observer(() => {
                 <div></div>
                 <div className={'flex gap-5'}>
                     <div className={'w-200px'}>
-                        <SelectManagers selectedManager={selectedManager} setSelectedManager={setSelectedManager} />
+                        <SelectAgent setSelectedAgentID={setSelectedAgent} />
                     </div>
                     <div className={'w-200px'}>
                         <SelectCntRowTable />
@@ -130,7 +144,11 @@ const RecordsListPage = observer(() => {
             </div>
 
             <AppLoadingOverlay ref={tableWrapperRef} active={rootStore?.recordsList.state === 'pending'}>
-                <RecordList data={rootStore?.recordsList.data} included={rootStore?.recordsList.included!} />
+                <RecordList
+                    data={rootStore?.recordsList.data}
+                    included={rootStore?.recordsList.included!}
+                    handleMenuDel={handleMenuDel}
+                />
             </AppLoadingOverlay>
 
             {showPagination && (

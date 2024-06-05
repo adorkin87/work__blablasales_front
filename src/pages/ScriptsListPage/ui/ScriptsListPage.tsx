@@ -1,4 +1,4 @@
-import { MouseEvent, useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 //components
@@ -21,6 +21,7 @@ const ScriptsListPage = observer(() => {
     //states
     const [showScriptCard, setShowScriptCard] = useState<boolean>(false);
     const [disabledBtnSave, setDisabledBtnSave] = useState<boolean>(true);
+    const [activeScriptCardTab, setActiveScriptCardTab] = useState<string>('marker');
 
     //**************************************************************************************************
     //effects
@@ -41,28 +42,28 @@ const ScriptsListPage = observer(() => {
     }, [scriptStore.changed, scriptStore.data?.attributes.name]);
 
     //**************************************************************************************************
-    //agentHandlers
+    //handlers
 
     const handleBtnAdd = (): void => {
         scriptStore.createNewScript();
+        setActiveScriptCardTab('marker');
         setShowScriptCard(true);
     };
 
     const handleBtnSave = async () => {
         scriptStore.data?.id ? await scriptStore.upd(scriptStore.data.id) : await scriptStore.add();
         setShowScriptCard(false);
-        void rootStore.scriptsList.getList();
+        await rootStore.scriptsList.getList();
     };
 
-    const handleMenuEdit = (e: MouseEvent, itemID: string) => {
-        e.stopPropagation();
+    const handleMenuEdit = (itemID: string) => {
         scriptStore.createNewScript();
+        setActiveScriptCardTab('marker');
         void scriptStore.get(itemID);
         setShowScriptCard(true);
     };
 
-    const handleMenuDel = async (e: MouseEvent, itemID: string) => {
-        e.stopPropagation();
+    const handleMenuDel = async (itemID: string) => {
         await rootStore?.scriptsList.del(itemID);
         await rootStore?.scriptsList.getList();
     };
@@ -96,7 +97,12 @@ const ScriptsListPage = observer(() => {
                 setOnShow={setShowScriptCard}
                 handleBtnSave={handleBtnSave}
                 stateBtnSave={disabledBtnSave}>
-                <ScriptCard scriptStore={scriptStore} />
+                <ScriptCard
+                    scriptStore={scriptStore}
+                    rootStore={rootStore}
+                    activeTabs={activeScriptCardTab}
+                    setActiveTabs={setActiveScriptCardTab}
+                />
             </AppDock>
         </>
     );

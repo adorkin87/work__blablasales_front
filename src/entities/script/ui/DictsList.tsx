@@ -1,4 +1,4 @@
-import { FC, useState, MouseEvent } from 'react';
+import { FC, useState } from 'react';
 import classNames from 'classnames';
 
 //types
@@ -22,8 +22,8 @@ enum Types {
 
 interface IProps {
     data?: TDict[] | null;
-    handleMenuEdit: (e: MouseEvent, itemID: string) => void;
-    handleMenuDel: (e: MouseEvent, itemID: string) => Promise<void>;
+    handleMenuEdit: (itemID: string) => void;
+    handleMenuDel: (itemID: string) => void;
 }
 
 const DictList: FC<IProps> = ({ data, handleMenuEdit, handleMenuDel }) => {
@@ -60,12 +60,25 @@ const DictList: FC<IProps> = ({ data, handleMenuEdit, handleMenuDel }) => {
             renderCell: (item) => (
                 <div className={'flex items-center justify-between gap-2'}>
                     <div className={'ellipsis'}>{Types[item.attributes.type]}</div>
-                    <AppPopUpMenu>
-                        <AppPopUpBtnExpand onExpand={idsExpand.includes(item.id)} onClick={() => handleExpand(item)} />
-                        <AppPopUpDivider />
-                        <AppPopUpBtnEdit onClick={(e) => handleMenuEdit(e, item.id)} />
-                        <AppPopUpBtnDel onClick={(e) => handleMenuDel(e, item.id)} />
-                    </AppPopUpMenu>
+                    <AppPopUpMenu
+                        items={[
+                            {
+                                elem: <AppPopUpBtnExpand onExpand={idsExpand.includes(item.id)} />,
+                                onClick: () => handleExpand(item)
+                            },
+                            {
+                                elem: <AppPopUpDivider />
+                            },
+                            {
+                                elem: <AppPopUpBtnEdit />,
+                                onClick: () => handleMenuEdit(item.id)
+                            },
+                            {
+                                elem: <AppPopUpBtnDel />,
+                                onClick: () => handleMenuDel(item.id)
+                            }
+                        ]}
+                    />
                 </div>
             )
             // resize: true

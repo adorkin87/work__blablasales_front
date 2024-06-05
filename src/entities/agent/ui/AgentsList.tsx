@@ -1,4 +1,4 @@
-import { FC, MouseEvent } from 'react';
+import { FC } from 'react';
 
 //types
 import type { Column } from '@table-library/react-table-library/compact';
@@ -10,8 +10,8 @@ import AppPopUpMenu, { AppPopUpBtnDel, AppPopUpBtnEdit } from 'src/shared/ui/App
 
 interface IProps {
     data?: TAgent[] | null;
-    handleMenuEdit: (e: MouseEvent, itemID: string) => void;
-    handleMenuDel: (e: MouseEvent, itemID: string) => Promise<void>;
+    handleMenuEdit: (itemID: string) => void;
+    handleMenuDel: (itemID: string) => void;
 }
 
 const AgentsList: FC<IProps> = ({ data, handleMenuEdit, handleMenuDel }) => {
@@ -32,10 +32,18 @@ const AgentsList: FC<IProps> = ({ data, handleMenuEdit, handleMenuDel }) => {
             renderCell: (item) => (
                 <div className={'flex items-center justify-between gap-2'}>
                     <div className={'ellipsis'}>{item.attributes.phone}</div>
-                    <AppPopUpMenu>
-                        <AppPopUpBtnEdit onClick={(e) => handleMenuEdit(e, item.id)} />
-                        <AppPopUpBtnDel onClick={(e) => handleMenuDel(e, item.id)} />
-                    </AppPopUpMenu>
+                    <AppPopUpMenu
+                        items={[
+                            {
+                                elem: <AppPopUpBtnEdit />,
+                                onClick: () => handleMenuEdit(item.id)
+                            },
+                            {
+                                elem: <AppPopUpBtnDel />,
+                                onClick: () => handleMenuDel(item.id)
+                            }
+                        ]}
+                    />
                 </div>
             )
             // resize: true

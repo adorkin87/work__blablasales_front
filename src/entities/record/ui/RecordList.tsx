@@ -8,13 +8,15 @@ import type { TRecord } from '../types/types.ts';
 
 //components
 import AppTable from 'src/shared/ui/AppTable';
+import AppPopUpMenu, { AppPopUpBtnDel } from 'src/shared/ui/AppPopUpMenu';
 
 interface IProps {
     data?: TRecord[] | null;
     included: (TAgent | TScript)[];
+    handleMenuDel: (itemID: string) => void;
 }
 
-const RecordList: FC<IProps> = ({ data, included }) => {
+const RecordList: FC<IProps> = ({ data, included, handleMenuDel }) => {
     const columns: Column<Required<TRecord>>[] = [
         {
             label: 'Дата',
@@ -61,7 +63,21 @@ const RecordList: FC<IProps> = ({ data, included }) => {
         },
         {
             label: 'Выполнение скрипта, %',
-            renderCell: (item) => item.attributes.kpiPercent
+            renderCell: (item) => (
+                <div className={'flex items-center justify-between'}>
+                    <div className={'ellipsis'}>{item.attributes.kpiPercent ?? ''}</div>
+                    <div className={'flex items-center justify-between gap-2'}>
+                        <AppPopUpMenu
+                            items={[
+                                {
+                                    elem: <AppPopUpBtnDel />,
+                                    onClick: () => handleMenuDel(item.id)
+                                }
+                            ]}
+                        />
+                    </div>
+                </div>
+            )
         }
     ];
 

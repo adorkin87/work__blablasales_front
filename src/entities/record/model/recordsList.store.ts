@@ -1,4 +1,4 @@
-import { makeObservable, observable, action } from 'mobx';
+import { makeObservable, observable, action, runInAction } from 'mobx';
 
 import type { TStoreState } from 'src/shared/types/types.ts';
 import type RootStore from 'src/app/model/root.store.ts';
@@ -29,31 +29,33 @@ class RecordsListStore {
         this.state = 'done';
     }
 
-    getList(getParams?: TAPIGetParams) {
+    async getList(getParams?: TAPIGetParams) {
         if (this.state === 'loading') return;
         this.state = 'loading';
 
-        this.rootStore.api.record
-            .list(getParams)
-            .then(
-                action((res) => {
-                    this.data = res.data;
-                    this.included = res.included!;
-                    this.meta = res.meta!;
-                    this.state = 'done';
-                })
-            )
-            .catch(this.setErrorStore);
+        try {
+            const res = await this.rootStore.api.record.list(getParams);
+            runInAction(() => {
+                this.data = res.data;
+                this.included = res.included!;
+                this.meta = res.meta!;
+                this.state = 'done';
+            });
+        } catch {
+            this.setErrorStore();
+        }
     }
 
-    del(recordID: string) {
+    async del(recordID: string) {
         if (this.state === 'loading') return;
         this.state = 'loading';
 
-        this.rootStore.api.record
-            .del(recordID)
-            .then(action(() => (this.state = 'done')))
-            .catch(this.setErrorStore);
+        try {
+            await this.rootStore.api.record.del(recordID);
+            runInAction(() => (this.state = 'done'));
+        } catch {
+            this.setErrorStore();
+        }
     }
 
     private setErrorStore() {

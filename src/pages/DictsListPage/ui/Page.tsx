@@ -1,4 +1,4 @@
-import { useContext, useEffect, MouseEvent, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 //components
@@ -41,7 +41,7 @@ const DictsListPage = observer(() => {
     }, [dictStore.changed, dictStore.data?.attributes.name]);
 
     //**************************************************************************************************
-    //agentHandlers
+    //handlers
 
     const handleBtnAdd = () => {
         dictStore.createNewDict();
@@ -49,22 +49,22 @@ const DictsListPage = observer(() => {
     };
 
     const handleBtnSave = async () => {
-        dictStore.data?.id ? dictStore.upd(dictStore.data.id) : dictStore.add();
+        dictStore.data?.id ? await dictStore.upd(dictStore.data.id) : await dictStore.add();
         setShowDictCard(false);
-        void rootStore.dictsList.getList();
+        await rootStore.dictsList.getList();
     };
 
-    const handleMenuEdit = (e: MouseEvent, itemID: string) => {
-        e.stopPropagation();
+    const handleMenuEdit = (itemID: string) => {
+        // e.stopPropagation();
         dictStore.createNewDict();
-        dictStore.get(itemID);
+        void dictStore.get(itemID);
         setShowDictCard(true);
     };
 
-    const handleMenuDel = async (e: MouseEvent, itemID: string) => {
-        e.stopPropagation();
-        rootStore.dictsList.del(itemID);
-        rootStore.dictsList.getList();
+    const handleMenuDel = async (itemID: string) => {
+        // e.stopPropagation();
+        await rootStore.dictsList.del(itemID);
+        await rootStore.dictsList.getList();
     };
 
     //**************************************************************************************************

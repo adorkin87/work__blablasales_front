@@ -1,5 +1,6 @@
 //type
 export type { TDict, TScript } from './types/types.ts';
+export { DictPriority } from './types/types.ts';
 
 //api
 import createDictApi from './api/dict.api.ts';

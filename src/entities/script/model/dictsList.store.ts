@@ -1,4 +1,4 @@
-import { action, autorun, makeObservable, observable } from 'mobx';
+import { action, autorun, makeObservable, observable, runInAction } from 'mobx';
 
 //types
 import type { TStoreState } from 'src/shared/types/types.ts';
@@ -29,30 +29,32 @@ class DictListStore {
         initDictList();
     }
 
-    getList(getParams?: TAPIGetParams) {
+    async getList(getParams?: TAPIGetParams) {
         if (this.state === 'loading') return;
         this.state = 'loading';
 
-        this.rootStore.api.dict
-            .list(getParams)
-            .then(
-                action((res) => {
-                    this.data = res.data;
-                    this.meta = res.meta!;
-                    this.state = 'done';
-                })
-            )
-            .catch(this.setErrorStore);
+        try {
+            const res = await this.rootStore.api.dict.list(getParams);
+            runInAction(() => {
+                this.data = res.data;
+                this.meta = res.meta!;
+                this.state = 'done';
+            });
+        } catch {
+            this.setErrorStore();
+        }
     }
 
-    del(dictID: string) {
+    async del(dictID: string) {
         if (this.state === 'loading') return;
         this.state = 'loading';
 
-        this.rootStore.api.dict
-            .del(dictID)
-            .then(action(() => (this.state = 'done')))
-            .catch(this.setErrorStore);
+        try {
+            await this.rootStore.api.dict.del(dictID);
+            runInAction(() => (this.state = 'done'));
+        } catch {
+            this.setErrorStore();
+        }
     }
 
     private setErrorStore() {

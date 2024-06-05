@@ -1,4 +1,5 @@
-import { action, autorun, makeObservable, observable } from 'mobx';
+import { action, autorun, makeObservable, observable, runInAction } from 'mobx';
+import { toast } from 'react-toastify';
 
 //types
 import type { TStoreState } from 'src/shared/types/types.ts';
@@ -29,30 +30,36 @@ class AgentListStore {
         initAgentList();
     }
 
-    getList(getParams?: TAPIGetParams) {
+    async getList(getParams?: TAPIGetParams) {
         if (this.state === 'loading') return;
         this.state = 'loading';
 
-        this.rootStore.api.agent
-            .list(getParams)
-            .then(
-                action((res) => {
-                    this.data = res.data;
-                    this.meta = res.meta!;
-                    this.state = 'done';
-                })
-            )
-            .catch(this.setErrorStore);
+        try {
+            const res = await this.rootStore.api.agent.list(getParams);
+            runInAction(() => {
+                this.data = res.data;
+                this.meta = res.meta!;
+                this.state = 'done';
+            });
+        } catch {
+            this.setErrorStore();
+        }
     }
 
-    del(agentID: string) {
+    async del(agentID: string) {
         if (this.state === 'loading') return;
         this.state = 'loading';
 
-        this.rootStore.api.agent
-            .del(agentID)
-            .then(action(() => (this.state = 'done')))
-            .catch(this.setErrorStore);
+        try {
+            await this.rootStore.api.agent.del(agentID);
+            runInAction(() => {
+                toast.success('Менеджер удален');
+                this.state = 'done';
+            });
+        } catch {
+            toast.error('Произошла ошибка при удалении');
+            this.setErrorStore();
+        }
     }
 
     private setErrorStore() {

@@ -7,7 +7,7 @@ export default function convertGetParams(getParams?: TAPIGetParams): string | un
 
     let key: keyof TAPIGetParams;
     for (key in getParams) {
-        result[key] = String(getParams[key]);
+        if (String(getParams[key])) result[key] = String(getParams[key]);
     }
 
     return '?' + new URLSearchParams(result).toString();

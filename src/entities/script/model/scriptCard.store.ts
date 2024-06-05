@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import { toast } from 'react-toastify';
 import { cloneDeep, isEqual } from 'lodash';
 
@@ -25,51 +25,55 @@ class ScriptCardStore {
             add: action,
             upd: action,
             createNewScript: action,
-            updTextField: action
+            updTextField: action,
+            updKevIDs: action,
+            updMarkerIDs: action,
+            updObjectionIDs: action,
+            updDictPriority: action
         });
 
         this.rootStore = rootStore;
     }
 
-    get(id: string) {
+    async get(id: string) {
         if (this.state === 'loading') return;
         this.state = 'loading';
 
-        this.rootStore.api.script
-            .one(id)
-            .then(
-                action((res) => {
-                    this.initData = res.data;
-                    this.data = cloneDeep(this.initData);
-                    this.state = 'done';
-                })
-            )
-            .catch(this.setErrorStore);
+        try {
+            const res = await this.rootStore.api.script.one(id);
+            runInAction(() => {
+                this.initData = res.data;
+                this.data = cloneDeep(this.initData);
+                this.state = 'done';
+            });
+        } catch {
+            this.setErrorStore();
+        }
     }
 
-    add() {
+    async add() {
         if (this.state === 'loading' || !this.data) return;
         this.state = 'loading';
 
-        this.rootStore.api.script
-            .add(this.data)
-            .then(
-                action((res) => {
-                    if (res.errors) {
-                        res.errors.map((err) => toast(err.title));
-                        this.state = 'done';
-                        return;
-                    }
-                    this.initData = res.data;
-                    this.data = cloneDeep(this.initData);
+        try {
+            const res = await this.rootStore.api.script.add(this.data);
+            runInAction(() => {
+                if (res.errors) {
+                    res.errors.map((err) => toast(err.title));
                     this.state = 'done';
-                    toast.success('Скрипт успешно добавлен');
-                })
-            )
-            .catch(this.setErrorStore);
+                    return;
+                }
+                this.initData = res.data;
+                this.data = cloneDeep(this.initData);
+                this.state = 'done';
+                toast.success('Скрипт успешно добавлен');
+            });
+        } catch {
+            this.setErrorStore();
+        }
     }
 
-    upd(id: string) {
+    async upd(id: string) {
         if (this.state === 'loading' || !this.data || isEqual(this.initData, this.data)) return;
         this.state = 'loading';
 
@@ -80,22 +84,22 @@ class ScriptCardStore {
                 payload[key] = this.data.attributes[key];
         }
 
-        this.rootStore.api.script
-            .upd(id, { ...this.data, attributes: { ...payload } })
-            .then(
-                action((res) => {
-                    if (res.errors) {
-                        res.errors.map((err) => toast(err.title));
-                        this.state = 'done';
-                        return;
-                    }
-                    this.initData = res.data;
-                    this.data = cloneDeep(this.initData);
+        try {
+            const res = await this.rootStore.api.script.upd(id, { ...this.data, attributes: { ...payload } });
+            runInAction(() => {
+                if (res.errors) {
+                    res.errors.map((err) => toast(err.title));
                     this.state = 'done';
-                    toast.success('Скрипт успешно обновлен');
-                })
-            )
-            .catch(this.setErrorStore);
+                    return;
+                }
+                this.initData = res.data;
+                this.data = cloneDeep(this.initData);
+                this.state = 'done';
+                toast.success('Скрипт успешно обновлен');
+            });
+        } catch {
+            this.setErrorStore();
+        }
     }
 
     private createEmptyScript(): TScript {
@@ -129,6 +133,34 @@ class ScriptCardStore {
     updTextField(fieldName: 'name' | 'comment', newValue: string) {
         if (!this.data) return;
         this.data.attributes[fieldName] = newValue;
+        this.changed = !isEqual(this.initData, this.data);
+    }
+
+    updKevIDs(newValue: { id: string }[]) {
+        if (!this.data) return;
+        this.data.attributes.kev = newValue;
+        this.changed = !isEqual(this.initData, this.data);
+    }
+
+    updMarkerIDs(newValue: { id: string; priority: number }[]) {
+        if (!this.data) return;
+        this.data.attributes.marker = newValue;
+        this.changed = !isEqual(this.initData, this.data);
+    }
+
+    updObjectionIDs(newValue: { id: string; priority?: number }[]) {
+        if (!this.data) return;
+        this.data.attributes.objection = newValue;
+        this.changed = !isEqual(this.initData, this.data);
+    }
+
+    updDictPriority(type: 'marker' | 'objection', dictID: string, newPriority: number) {
+        if (!this.data) return;
+        const value = [...this.data.attributes[type]];
+        value.forEach((dict) => {
+            if (dict.id === dictID) dict.priority = newPriority;
+        });
+        this.data.attributes[type] = [...value];
         this.changed = !isEqual(this.initData, this.data);
     }
 }

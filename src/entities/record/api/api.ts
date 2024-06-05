@@ -6,7 +6,13 @@ import type { TAgent } from 'src/entities/agent';
 import { helperCreateAPI } from 'src/shared/api';
 
 function createRecordApi(httpClient: AxiosInstance) {
-    return helperCreateAPI<TRecord, TScript | TAgent>(httpClient, import.meta.env.VITE_ENDPOINT_RECORD);
+    const api = helperCreateAPI<TRecord, TScript | TAgent>(httpClient, import.meta.env.VITE_ENDPOINT_RECORD);
+
+    const add = async (payload: FormData) => {
+        return (await httpClient.post(import.meta.env.VITE_ENDPOINT_RECORD, payload)).data;
+    };
+
+    return { ...api, add };
 }
 
 export default createRecordApi;

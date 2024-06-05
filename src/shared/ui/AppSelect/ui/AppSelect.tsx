@@ -5,7 +5,7 @@ interface IAppSelect {
     label?: string;
     placeholder?: string;
     options: { value: number; label: string }[];
-    value: { value: number; label: string } | null;
+    value?: { value: number; label: string } | null;
     setNewValue: (
         newValue: SingleValue<{ value: number; label: string }>,
         actionMeta: ActionMeta<{ value: number; label: string }>
@@ -20,7 +20,7 @@ const AppSelect: FC<IAppSelect> = ({ label, placeholder, options, value, setNewV
     useEffect(() => {
         if (!ref.current) return;
         ref.current.clearValue();
-        ref.current?.setValue(value, 'select-option');
+        value && ref.current?.setValue(value, 'select-option');
     }, [forceClear]);
 
     return (

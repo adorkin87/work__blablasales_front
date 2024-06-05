@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useState, MouseEvent } from 'react';
 import {
     autoUpdate,
     offset,
@@ -12,13 +12,12 @@ import {
     useRole
 } from '@floating-ui/react';
 
-interface IPopUpMenuProps {
-    children: ReactNode;
-    forceClose?: boolean;
+interface IProps {
+    items: { elem: ReactNode; onClick?: () => void }[];
 }
 
-const AppPopUpMenu: FC<IPopUpMenuProps> = ({ children, forceClose }) => {
-    const [isOpen, setIsOpen] = useState<boolean>(forceClose ? !forceClose : false);
+const AppPopUpMenu: FC<IProps> = ({ items }) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const { refs, floatingStyles, context } = useFloating({
         open: isOpen,
@@ -33,6 +32,12 @@ const AppPopUpMenu: FC<IPopUpMenuProps> = ({ children, forceClose }) => {
     const role = useRole(context, { role: 'menu' });
 
     const { getReferenceProps, getFloatingProps } = useInteractions([role, dismiss, click]);
+
+    const handleOnClick = (e: MouseEvent, handle?: () => void) => {
+        e.stopPropagation();
+        handle && handle();
+        setIsOpen(false);
+    };
 
     return (
         <>
@@ -55,7 +60,11 @@ const AppPopUpMenu: FC<IPopUpMenuProps> = ({ children, forceClose }) => {
                             {...getFloatingProps()}
                             className={'py-2 bg-white z-200 b-rd b b-solid b-color-color-second/50'}
                             onClick={(e) => e.stopPropagation()}>
-                            {children}
+                            {items.map((item, index) => (
+                                <div key={index} onClick={(e) => handleOnClick(e, item.onClick)}>
+                                    {item.elem}
+                                </div>
+                            ))}
                         </div>
                     </FloatingPortal>
                 </>

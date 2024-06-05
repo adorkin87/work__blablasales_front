@@ -1,7 +1,7 @@
 import { useState, FC, ReactNode } from 'react';
 import { Dock } from 'react-dock';
 
-interface IAppDock {
+interface IProps {
     title?: string;
     onShow: boolean;
     setOnShow: (show: boolean) => void;
@@ -10,7 +10,7 @@ interface IAppDock {
     stateBtnSave?: boolean;
 }
 
-const AppDock: FC<IAppDock> = ({ title, onShow, setOnShow, children, handleBtnSave, stateBtnSave }) => {
+const AppDock: FC<IProps> = ({ title, onShow, setOnShow, children, handleBtnSave, stateBtnSave }) => {
     const [sizeDock, setSizeDock] = useState<number>(500);
 
     const handleResizeDock = (size: number) => {
@@ -40,7 +40,7 @@ const AppDock: FC<IAppDock> = ({ title, onShow, setOnShow, children, handleBtnSa
                 backgroundColor: '#efefef'
             }}>
             <div className={'h-full flex flex-col justify-between overflow-hidden'}>
-                <div>
+                <div className={'overflow-auto'}>
                     {title && (
                         <div className={'top-panel'}>
                             <p className={'title'}>{title}</p>

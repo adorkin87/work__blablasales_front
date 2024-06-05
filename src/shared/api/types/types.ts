@@ -1,6 +1,7 @@
 export type TAPIGetParams = {
     'page[offset]'?: number;
     'page[limit]'?: number;
+    'filter[agent]'?: string;
 };
 
 export type TAPIResponseMeta = {

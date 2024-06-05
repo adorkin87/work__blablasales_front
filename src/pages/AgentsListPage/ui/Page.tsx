@@ -1,4 +1,4 @@
-import { MouseEvent, useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 
 //src components
@@ -49,22 +49,20 @@ const Page = observer(() => {
     };
 
     const handleBtnSave = async () => {
-        agentStore.data?.id ? agentStore.upd(agentStore.data.id) : agentStore.add();
+        agentStore.data?.id ? await agentStore.upd(agentStore.data.id) : await agentStore.add();
         setShowAgentCard(false);
-        rootStore.agentsList.getList();
+        await rootStore.agentsList.getList();
     };
 
-    const handleMenuEdit = (e: MouseEvent, itemID: string) => {
-        e.stopPropagation();
+    const handleMenuEdit = (itemID: string) => {
         agentStore.createNewAgent();
-        agentStore.get(itemID);
+        void agentStore.get(itemID);
         setShowAgentCard(true);
     };
 
-    const handleMenuDel = async (e: MouseEvent, itemID: string) => {
-        e.stopPropagation();
-        rootStore.agentsList.del(itemID);
-        rootStore.agentsList.getList();
+    const handleMenuDel = async (itemID: string) => {
+        await rootStore.agentsList.del(itemID);
+        await rootStore.agentsList.getList();
     };
 
     //**************************************************************************************************

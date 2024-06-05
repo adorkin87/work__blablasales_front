@@ -1,4 +1,4 @@
-import { action, autorun, makeObservable, observable } from 'mobx';
+import { action, autorun, makeObservable, observable, runInAction } from 'mobx';
 
 import type { TStoreState } from 'src/shared/types/types.ts';
 import type RootStore from 'src/app/model/root.store.ts';
@@ -29,31 +29,33 @@ class ScriptsListStore {
         initScriptList();
     }
 
-    getList(getParams?: TAPIGetParams) {
+    async getList(getParams?: TAPIGetParams) {
         if (this.state === 'loading') return;
         this.state = 'loading';
 
-        this.rootStore.api.script
-            .list(getParams)
-            .then(
-                action((res) => {
-                    this.data = res.data;
-                    this.included = res.included!;
-                    this.meta = res.meta!;
-                    this.state = 'done';
-                })
-            )
-            .catch(this.setErrorStore);
+        try {
+            const res = await this.rootStore.api.script.list(getParams);
+            runInAction(() => {
+                this.data = res.data;
+                this.included = res.included!;
+                this.meta = res.meta!;
+                this.state = 'done';
+            });
+        } catch {
+            this.setErrorStore();
+        }
     }
 
-    del(scriptID: string) {
+    async del(scriptID: string) {
         if (this.state === 'loading') return;
         this.state = 'loading';
 
-        this.rootStore.api.script
-            .del(scriptID)
-            .then(action(() => (this.state = 'done')))
-            .catch(this.setErrorStore);
+        try {
+            await this.rootStore.api.script.del(scriptID);
+            runInAction(() => (this.state = 'done'));
+        } catch {
+            this.setErrorStore();
+        }
     }
 
     private setErrorStore() {

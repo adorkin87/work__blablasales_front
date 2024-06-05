@@ -17,6 +17,13 @@ export type TScript = {
         comment?: string;
         kev: { id: string }[];
         marker: { id: string; priority: number }[];
-        objection: { id: string; priority?: number }[];
+        objection: { id: string; priority: number }[];
     };
 };
+
+export enum DictPriority {
+    'low' = 1.25,
+    'normal' = 1.5,
+    'medium' = 1.75,
+    'high' = 2
+}
