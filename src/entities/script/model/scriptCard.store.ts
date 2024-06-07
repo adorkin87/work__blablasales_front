@@ -77,15 +77,16 @@ class ScriptCardStore {
         if (this.state === 'loading' || !this.data || isEqual(this.initData, this.data)) return;
         this.state = 'loading';
 
-        const payload: Partial<TScript['attributes']> = {};
-        let key: keyof TScript['attributes'];
-        for (key in this.data.attributes) {
-            if (!isEqual(this.data.attributes[key], this.initData!.attributes[key]))
-                payload[key] = this.data.attributes[key];
-        }
+        // const payload: Partial<TScript['attributes']> = {};
+        // let key: keyof TScript['attributes'];
+        // for (key in this.data.attributes) {
+        //     if (!isEqual(this.data.attributes[key], this.initData!.attributes[key]))
+        //         payload[key] = this.data.attributes[key];
+        // }
 
         try {
-            const res = await this.rootStore.api.script.upd(id, { ...this.data, attributes: { ...payload } });
+            // const res = await this.rootStore.api.script.upd(id, { ...this.data, attributes: { ...payload } });
+            const res = await this.rootStore.api.script.upd(id, this.data);
             runInAction(() => {
                 if (res.errors) {
                     res.errors.map((err) => toast(err.title));

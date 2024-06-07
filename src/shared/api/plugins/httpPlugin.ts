@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 function createHttpPlugin() {
     const httpClient = axios.create({
         baseURL: import.meta.env.VITE_BACK_URL,
-        timeout: 10000
+        timeout: 60000
     });
 
     httpClient.interceptors.response.use(handleResponse, handleError);
@@ -20,7 +20,8 @@ function createHttpPlugin() {
             toast.error('Ошибка в запросе на сервер', { autoClose: false, theme: 'colored' });
         if (error.response && error.response.status >= 500)
             toast.error('На сервере произошла ошибка', { autoClose: false, theme: 'colored' });
-        return error;
+        throw error;
+        // return error;
     }
 
     return httpClient;

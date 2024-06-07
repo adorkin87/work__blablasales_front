@@ -57,7 +57,7 @@ const createRecordHandlers = (fakeDB: { endpoints: Record<string, any[]> }) => {
             const data = await request.formData();
             const file = data.get('file');
 
-            return HttpResponse.json({ data: file!.name });
+            return HttpResponse.json({ data: file!.name }, { status: 500 });
             // return HttpResponse.json({ data: file });
         })
     ];

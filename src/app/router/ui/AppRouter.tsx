@@ -18,7 +18,7 @@ const AppRouter = observer(() => {
     const element = useRoutes(rootStore?.viewer.auth.value ? authorizedRoutes : nonAuthorizedRoutes);
 
     useEffect(() => {
-        rootStore?.viewer.auth.value ? navigate('/') : navigate('/login');
+        !rootStore?.viewer.auth.value && navigate('/login');
     }, [rootStore?.viewer.auth.value]);
 
     useEffect(() => {

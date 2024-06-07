@@ -46,7 +46,7 @@ class RecordUploadListStore {
         this.state = 'loading';
 
         const payload = new FormData();
-        this.selectedAgent && payload.append('agent_id', this.selectedAgent);
+        this.selectedAgent ? payload.append('agent_id', this.selectedAgent) : payload.append('agent_id', '0');
         payload.append('script_id', this.selectedScript);
         for (const [index, value] of this.files.entries()) {
             if (this.files[index].state === 'done') continue;
@@ -69,7 +69,7 @@ class RecordUploadListStore {
         this.state = 'loading';
 
         const payload = new FormData();
-        this.selectedAgent && payload.append('agent_id', this.selectedAgent);
+        this.selectedAgent ? payload.append('agent_id', this.selectedAgent) : payload.append('agent_id', '0');
         payload.append('script_id', this.selectedScript);
         payload.append('file', this.files[index].file);
         try {

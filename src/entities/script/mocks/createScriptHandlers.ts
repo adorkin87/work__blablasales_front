@@ -32,8 +32,6 @@ const createScriptHandlers = (fakeDB: { endpoints: Record<string, any[]> }) => {
                 }
             }
 
-            console.log(idsDict);
-
             return HttpResponse.json({
                 data: fakeDB.endpoints.script,
                 included: fakeDB.endpoints.dict.filter((dict) => idsDict.has(dict.id)),
